@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.quiz.QuizSessionFragment">
+    android:layout_height="match_parent">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -35,7 +34,7 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?attr/textAppearanceHeadline6"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:text="Тест по основам сетевых протоколов" />
+                tools:text="Mahmudxo‘ja Behbudiy. Tanlangan asarlar 1-Jild" />
 
             <LinearLayout
                 android:id="@+id/timerLayout"
@@ -68,6 +67,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
+                app:indicatorColor="@color/blue"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/timerLayout"
@@ -81,7 +81,7 @@
                 android:textAppearance="?attr/textAppearanceCaption"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/progressIndicator"
-                tools:text="4/10 вопросов отвечено" />
+                tools:text="4/10 savolga javob berildi" />
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/questionCard"
@@ -104,7 +104,7 @@
                         android:textAppearance="?attr/textAppearanceCaption"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        tools:text="Вопрос 1/10" />
+                        tools:text="Savol 1/10" />
 
                     <TextView
                         android:id="@+id/questionTextView"
@@ -113,7 +113,7 @@
                         android:layout_marginTop="8dp"
                         android:textAppearance="?attr/textAppearanceBody1"
                         app:layout_constraintTop_toBottomOf="@+id/questionNumberTextView"
-                        tools:text="Какой из следующих протоколов работает на транспортном уровне модели OSI?" />
+                        tools:text="Mahmudxo‘ja Behbudiy yozgan birinchi o‘zbek dramaturgik asar qaysi?" />
 
                     <RadioGroup
                         android:id="@+id/singleChoiceGroup"
@@ -129,25 +129,25 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
-                            tools:text="HTTP" />
+                            tools:text="“Padarkush”" />
 
                         <RadioButton
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
-                            tools:text="TCP" />
+                            tools:text="“Turkiy guliston yoxud axloq”" />
 
                         <RadioButton
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
-                            tools:text="IP" />
+                            tools:text="“O‘tkan kunlar”" />
 
                         <RadioButton
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
-                            tools:text="Ethernet" />
+                            tools:text="“Mehrobdan chayon”" />
 
                     </RadioGroup>
 
@@ -237,26 +237,32 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:gravity="center"
+                android:orientation="horizontal"
                 app:layout_constraintTop_toBottomOf="@+id/questionCard">
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/previousButton"
                     style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                     android:layout_width="wrap_content"
+                    android:textColor="@color/blue"
                     android:layout_height="wrap_content"
                     android:text="@string/previous_question" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/nextButton"
                     android:layout_width="wrap_content"
+                    android:backgroundTint="@color/blue"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
                     android:text="@string/next_question" />
-
             </LinearLayout>
 
             <com.google.android.material.button.MaterialButton
+                    android:backgroundTint="@color/blue"
                 android:id="@+id/finishButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

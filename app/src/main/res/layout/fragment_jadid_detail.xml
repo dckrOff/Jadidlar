@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/colorSurface">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:fillViewport="true"
+        android:overScrollMode="never"
+        android:paddingBottom="24dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Верхняя картинка -->
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="400dp">
+
+                <ImageView
+                    android:id="@+id/imagePortrait"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/sample_jadid" />
+
+                <!-- Кнопка "назад" поверх изображения -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/buttonBack"
+                    style="@style/Widget.Material3.Button.Icon"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_margin="16dp"
+                    android:backgroundTint="@color/white"
+                    app:cornerRadius="50dp"
+                    app:icon="@drawable/ic_arrow_back"
+                    app:iconTint="?attr/colorOnSurface" />
+            </FrameLayout>
+
+            <!-- Имя -->
+            <TextView
+                android:id="@+id/textName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_medium"
+                android:paddingHorizontal="16dp"
+                android:paddingTop="12dp"
+                android:text="Mahmudxo‘ja Behbudiy"
+                android:textAppearance="?attr/textAppearanceHeadlineSmall"
+                android:textStyle="bold" />
+
+            <!-- Годы жизни + кнопка Batafsil -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="16dp"
+                android:paddingTop="4dp">
+
+                <TextView
+                    android:id="@+id/textYears"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_medium"
+                    android:text="(1875 – 1919)"
+                    android:textAppearance="?attr/textAppearanceBodyMedium"
+                    android:textColor="@color/blue" />
+
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/buttonMore"
+                    style="@style/Widget.Material3.Button.IconButton.Filled.Tonal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/blue"
+                    android:fontFamily="@font/roboto"
+                    android:text="   Batafsil   "
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
+                    app:iconGravity="end"
+                    app:iconPadding="8dp" />
+            </LinearLayout>
+
+            <!-- Биография -->
+            <TextView
+                android:id="@+id/textBiography"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:fontFamily="@font/roboto"
+                android:lineSpacingExtra="4dp"
+                android:maxLines="5"
+                android:paddingHorizontal="16dp"
+                android:paddingTop="8dp"
+                android:text="U 1875-yilning 19-yanvarida Samarqand yaqinidagi Baxshitepa qishlog‘ida muftiy oilasida dunyoga keldi. Otasi Behbudxo‘ja Solihxo‘ja o‘g‘li turkistonlik, Ahmad Yassaviyning avlodlaridan, ona tomonidan bobosi Niyozxo‘ja urganchlik bo‘lib, amir Shohmurod zamonida (1780-1785 yillar) Samarqandga kelib qolgan. Oiladagi muhit undagi ma’rifat va adabiyotga bo‘lgan qiziqishning tezroq ro‘yobga chiqishiga imkon tug‘dirdi. Behbudiyning otasi islom xuquqshunosligi bo‘yicha yirik mutaxassis bo‘lib, bu borada ko‘plab kitob va risolalar yaratgan edi. Bu o‘z navbatida Mahmudxo‘jaga ta’sir o‘tkazmay qolmadi. U keyinchalik bu haqda so‘zlab, hatto maqolalaridan birida otasi yozgan “Hidoya”  asarining o‘z taqdirida katta rol o‘ynaganini alohida qayd etgan. ..."
+                android:textAppearance="?attr/textAppearanceBodyMedium" />
+
+            <!-- Раздел Asarlar -->
+            <TextView
+                android:id="@+id/textAsarlarHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="16dp"
+                android:paddingTop="16dp"
+                android:text="Asarlar"
+                android:textAppearance="?attr/textAppearanceTitleMedium"
+                android:textStyle="bold" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerAsarlar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:overScrollMode="never"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/item_book" />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -8,4 +8,17 @@
     <string name="retry">Takrorlash</string>
     <string name="results">Natijalar</string>
     <string name="start_test">Testni boshlash</string>
+    <string name="your_score">Sizning natijangiz</string>
+    <string name="answers_review">Sizning javoblaringiz</string>
+    <string name="retake_quiz">Testni qayta ishlash</string>
+    <string name="correct_answer">To\'g\'ri javob:</string>
+    <string name="your_answer_label">Sizning javobingiz:</string>
+    <string name="explanation">Tushuntirish:</string>
+    <string name="quiz">Ma\'naviy test</string>
+    <string name="true_answer">To\'g\'ri</string>
+    <string name="false_answer">Noto\'g\'ri</string>
+    <string name="your_answer">Sizning javobingiz:</string>
+    <string name="previous_question">Oldingi</string>
+    <string name="next_question">Keyingi</string>
+    <string name="finish_test">Testni yakunlash</string>
 </resources>

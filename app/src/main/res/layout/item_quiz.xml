@@ -14,7 +14,7 @@
         android:padding="16dp">
 
         <TextView
-            android:id="@+id/titleTextView"
+            android:id="@+id/tvQuizName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textAppearance="?attr/textAppearanceHeadline6"
@@ -23,7 +23,7 @@
             tools:text="Mahmudxo‘ja Behbudiy. Tanlangan asarlar 1-Jild" />
 
         <TextView
-            android:id="@+id/descriptionTextView"
+            android:id="@+id/tvQuizDescription"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -32,7 +32,7 @@
             android:textAppearance="?attr/textAppearanceBody2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/titleTextView"
+            app:layout_constraintTop_toBottomOf="@+id/tvQuizName"
             tools:text="ХХ асрдаги миллий уйғониш даври адабиётининг буюк намоёндаси, миллат ходими Маҳмудҳўжа Беҳбудий «Танланган асарлар»ининг ушбу биринчи жилдига адиб бадиий ижоди намуналари, 1903 – 1918 йилларда эълон қилинган ижтимоий-сиёсий мақолалари, нутқлари киритилди." />
 
         <LinearLayout
@@ -43,10 +43,10 @@
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/descriptionTextView">
+            app:layout_constraintTop_toBottomOf="@+id/tvQuizDescription">
 
             <TextView
-                android:id="@+id/questionsCountTextView"
+                android:id="@+id/tvQuizCount"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -57,7 +57,7 @@
                 tools:text="10 savol" />
 
             <TextView
-                android:id="@+id/timeLimitTextView"
+                android:id="@+id/tvTimeLimit"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -68,7 +68,7 @@
                 tools:text="15 daqiqa" />
 
             <TextView
-                android:id="@+id/scoreTextView"
+                android:id="@+id/tvScore"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -81,7 +81,7 @@
         </LinearLayout>
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/startButton"
+            android:id="@+id/btnStart"
             style="@style/Widget.MaterialComponents.Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -92,7 +92,7 @@
             app:layout_constraintTop_toBottomOf="@+id/infoLayout" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/resultButton"
+            android:id="@+id/btnResult"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -101,7 +101,7 @@
             android:text="@string/results"
             android:visibility="gone"
             android:textColor="@color/blue"
-            app:layout_constraintEnd_toStartOf="@+id/startButton"
+            app:layout_constraintEnd_toStartOf="@+id/btnStart"
             app:layout_constraintTop_toBottomOf="@+id/infoLayout"
             tools:visibility="visible" />
 

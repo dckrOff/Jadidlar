@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.quiz.QuizResultsFragment">
+    android:layout_height="match_parent">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -35,7 +34,7 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?attr/textAppearanceHeadline6"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:text="Тест по основам сетевых протоколов" />
+                tools:text="Mahmudxo‘ja Behbudiy. Tanlangan asarlar 1-Jild" />
 
             <TextView
                 android:id="@+id/attemptDateTextView"
@@ -44,7 +43,7 @@
                 android:layout_marginTop="8dp"
                 android:textAppearance="?attr/textAppearanceCaption"
                 app:layout_constraintTop_toBottomOf="@+id/quizTitleTextView"
-                tools:text="Пройден: 12 мая 2023, 14:30" />
+                tools:text="Yakunlandi: 12 may 2025, 14:30" />
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/scoreCard"
@@ -70,7 +69,7 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
-                        android:id="@+id/scoreTextView"
+                        android:id="@+id/tvScore"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
@@ -89,8 +88,8 @@
                         android:textAppearance="?attr/textAppearanceBody2"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/scoreTextView"
-                        tools:text="17 из 20 ответов правильные" />
+                        app:layout_constraintTop_toBottomOf="@+id/tvScore"
+                        tools:text="20 dan 15 to'g'ri" />
 
                     <TextView
                         android:id="@+id/timeSpentTextView"
@@ -101,7 +100,7 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/correctAnswersTextView"
-                        tools:text="Затраченное время: 12:34" />
+                        tools:text="Sarflangan vaqt: 12:34" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 

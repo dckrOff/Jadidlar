@@ -20,7 +20,7 @@
             android:textAppearance="?attr/textAppearanceCaption"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="Вопрос 1" />
+            tools:text="1-savol" />
 
         <ImageView
             android:id="@+id/resultIconImageView"
@@ -40,7 +40,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/questionNumberTextView"
-            tools:text="Какой из следующих протоколов работает на транспортном уровне модели OSI?" />
+            tools:text="Mahmudxo‘ja Behbudiy yozgan birinchi o‘zbek dramaturgik asar qaysi?" />
 
         <TextView
             android:id="@+id/correctAnswerLabelTextView"
@@ -63,7 +63,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/correctAnswerLabelTextView"
-            tools:text="TCP" />
+            tools:text="“Padarkush”" />
 
         <TextView
             android:id="@+id/yourAnswerLabelTextView"
@@ -86,7 +86,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/yourAnswerLabelTextView"
-            tools:text="HTTP" />
+            tools:text="“O‘tkan kunlar”" />
 
         <TextView
             android:id="@+id/explanationLabelTextView"
@@ -108,7 +108,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/explanationLabelTextView"
-            tools:text="TCP (Transmission Control Protocol) работает на транспортном уровне модели OSI и обеспечивает надежную доставку данных между приложениями." />
+            tools:text="Mahmudxo‘ja Behbudiyning “Padarkush” asari — o‘zbek adabiyotidagi birinchi drama bo‘lib, u jaholatni fosh etib, xalqni ilm va tarbiyaga chaqiradi." />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
