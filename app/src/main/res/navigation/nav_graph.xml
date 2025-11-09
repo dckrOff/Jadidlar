@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_home_to_jadidList"
             app:destination="@id/jadidlarFragment" />
+        <action
+            android:id="@+id/action_home_to_bookDetail"
+            app:destination="@id/bookDetailFragment" />
     </fragment>
 
     <fragment
@@ -36,6 +39,9 @@
         <argument
             android:name="jadidId"
             app:argType="string" />
+        <action
+            android:id="@+id/action_jadidDetail_to_bookDetail"
+            app:destination="@id/bookDetailFragment" />
     </fragment>
 
     <fragment
@@ -79,5 +85,47 @@
         <argument
             android:name="timeSpent"
             app:argType="long" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/booksFragment"
+        android:name="uz.dckroff.jadidlar.ui.books.BooksFragment"
+        android:label="@string/books"
+        tools:layout="@layout/fragment_books">
+        <action
+            android:id="@+id/action_books_to_bookDetail"
+            app:destination="@id/bookDetailFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/bookDetailFragment"
+        android:name="uz.dckroff.jadidlar.ui.books.BookDetailFragment"
+        android:label="Asar haqida"
+        tools:layout="@layout/fragment_book_detail">
+        <argument
+            android:name="bookId"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_bookDetail_to_reader"
+            app:destination="@id/bookReaderFragment" />
+        <action
+            android:id="@+id/action_bookDetail_to_jadidDetail"
+            app:destination="@id/jadidDetailFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/bookReaderFragment"
+        android:name="uz.dckroff.jadidlar.ui.books.BookReaderFragment"
+        android:label="O'qish"
+        tools:layout="@layout/fragment_book_reader">
+        <argument
+            android:name="bookId"
+            app:argType="string" />
+        <argument
+            android:name="bookTitle"
+            app:argType="string" />
+        <argument
+            android:name="pdfUrl"
+            app:argType="string" />
     </fragment>
 </navigation>

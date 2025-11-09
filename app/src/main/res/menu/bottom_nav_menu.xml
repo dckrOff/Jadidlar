@@ -11,6 +11,11 @@
         android:title="Jadidlar" />
     
     <item
+        android:id="@+id/booksFragment"
+        android:icon="@drawable/ic_account_circle"
+        android:title="@string/books" />
+    
+    <item
         android:id="@+id/quizListFragment"
         android:icon="@drawable/ic_question"
         android:title="@string/tests" />

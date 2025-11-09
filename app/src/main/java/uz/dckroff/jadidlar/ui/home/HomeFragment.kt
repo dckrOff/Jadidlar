@@ -46,7 +46,8 @@ class HomeFragment : Fragment() {
         binding.recyclerJadidlar.adapter = jadidAdapter
 
         bookAdapter = BookAdapter { book ->
-            Toast.makeText(requireContext(), "Book: ${book.title}", Toast.LENGTH_SHORT).show()
+            val bundle = bundleOf("bookId" to book.id)
+            findNavController().navigate(R.id.action_home_to_bookDetail, bundle)
         }
         binding.recyclerTopAsarlar.adapter = bookAdapter
     }
