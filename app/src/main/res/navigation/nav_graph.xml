@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="uz.dckroff.jadidlar.ui.home.HomeFragment"
+        android:label="@string/app_name"
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/action_home_to_jadidDetail"
+            app:destination="@id/jadidDetailFragment" />
+        <action
+            android:id="@+id/action_home_to_jadidList"
+            app:destination="@id/jadidlarFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/jadidlarFragment"
+        android:name="uz.dckroff.jadidlar.ui.jadidlar.JadidlarFragment"
+        android:label="Jadidlar"
+        tools:layout="@layout/fragment_jadidlar">
+        <action
+            android:id="@+id/action_jadidlar_to_jadidDetail"
+            app:destination="@id/jadidDetailFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/jadidDetailFragment"
+        android:name="uz.dckroff.jadidlar.ui.jadidlar.JadidDetailFragment"
+        android:label="Jadid Detail"
+        tools:layout="@layout/fragment_jadid_detail">
+        <argument
+            android:name="jadidId"
+            app:argType="string" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/quizListFragment"
+        android:name="uz.dckroff.jadidlar.ui.quiz.QuizListFragment"
+        android:label="@string/tests"
+        tools:layout="@layout/fragment_quiz_list">
+        <action
+            android:id="@+id/action_quizList_to_quizSession"
+            app:destination="@id/quizSessionFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/quizSessionFragment"
+        android:name="uz.dckroff.jadidlar.ui.quiz.QuizSessionFragment"
+        android:label="@string/quiz"
+        tools:layout="@layout/fragment_quiz_session">
+        <argument
+            android:name="testId"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_quizSession_to_results"
+            app:destination="@id/quizResultsFragment"
+            app:popUpTo="@id/quizListFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/quizResultsFragment"
+        android:name="uz.dckroff.jadidlar.ui.quiz.QuizResultsFragment"
+        android:label="@string/results"
+        tools:layout="@layout/fragment_quiz_results">
+        <argument
+            android:name="testId"
+            app:argType="string" />
+        <argument
+            android:name="score"
+            app:argType="integer" />
+        <argument
+            android:name="totalQuestions"
+            app:argType="integer" />
+        <argument
+            android:name="timeSpent"
+            app:argType="long" />
+    </fragment>
+</navigation>
