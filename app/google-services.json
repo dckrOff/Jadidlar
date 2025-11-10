@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "123456789",
-    "project_id": "jadidlar-app",
-    "storage_bucket": "jadidlar-app.appspot.com"
+    "project_number": "476502841757",
+    "project_id": "jadidlar-4fccd",
+    "storage_bucket": "jadidlar-4fccd.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:123456789:android:abcdef123456",
+        "mobilesdk_app_id": "1:476502841757:android:0df30c38031975d7263774",
         "android_client_info": {
           "package_name": "uz.dckroff.jadidlar"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDummyKeyForDevelopment123456789"
+          "current_key": "AIzaSyB2zeW6FU7Px_-xAdLdzOt_65LhjLUlJiU"
         }
       ],
       "services": {

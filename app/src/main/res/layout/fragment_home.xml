@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".HomeFragment">
+    android:layout_height="match_parent">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -35,7 +34,6 @@
                     android:text="Bosh menu"
                     android:textAppearance="?attr/textAppearanceHeadlineMedium"
                     android:textSize="28sp" />
-
             </LinearLayout>
 
             <!-- Раздел Jadidlar -->
@@ -72,7 +70,6 @@
                 android:overScrollMode="never"
                 android:paddingEnd="8dp"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:orientation="horizontal"
                 tools:listitem="@layout/item_jadid" />
 
             <!-- Раздел Top asarlar -->
@@ -102,12 +99,12 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerTopAsarlar"
                 android:layout_width="match_parent"
-                tools:listitem="@layout/item_book"
                 android:layout_height="wrap_content"
-                tools:itemCount="3"
                 android:layout_marginTop="8dp"
                 android:overScrollMode="never"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:itemCount="3"
+                tools:listitem="@layout/item_book" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 

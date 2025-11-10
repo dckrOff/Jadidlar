@@ -111,6 +111,9 @@
         <action
             android:id="@+id/action_bookDetail_to_jadidDetail"
             app:destination="@id/jadidDetailFragment" />
+        <action
+            android:id="@+id/action_bookDetail_to_bookDetail"
+            app:destination="@id/bookDetailFragment" />
     </fragment>
 
     <fragment

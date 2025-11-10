@@ -7,7 +7,7 @@ plugins {
 
 android {
     namespace = "uz.dckroff.jadidlar"
-    compileSdk = 34
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "uz.dckroff.jadidlar"

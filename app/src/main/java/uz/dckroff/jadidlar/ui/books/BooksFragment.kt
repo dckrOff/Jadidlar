@@ -15,10 +15,14 @@ import uz.dckroff.jadidlar.databinding.FragmentBooksBinding
 import uz.dckroff.jadidlar.ui.adapters.BookAdapter
 import uz.dckroff.jadidlar.utils.Resource
 
+import android.text.Editable
+import android.text.TextWatcher
+import android.view.inputmethod.EditorInfo
+
 class BooksFragment : Fragment() {
     private var _binding: FragmentBooksBinding? = null
     private val binding get() = _binding!!
-    
+
     private val viewModel: BooksViewModel by viewModels()
     private lateinit var bookAdapter: BookAdapter
 
@@ -47,17 +51,35 @@ class BooksFragment : Fragment() {
     }
 
     private fun setupListeners() {
-        binding.searchBar.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                query?.let { viewModel.searchBooks(it) }
-                return true
+        // Связываем SearchBar и SearchView
+        binding.searchBar.setOnClickListener {
+            binding.searchView.show()
+        }
+
+        // Обрабатываем текст в SearchView
+        binding.searchView.editText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                s?.toString()?.let { query ->
+                    viewModel.searchBooks(query)
+                }
             }
 
-            override fun onQueryTextChange(newText: String?): Boolean {
-                newText?.let { viewModel.searchBooks(it) }
-                return true
-            }
+            override fun afterTextChanged(s: Editable?) {}
         })
+
+        // Обработка отправки поиска
+        binding.searchView.editText.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                val query = binding.searchView.text.toString()
+                viewModel.searchBooks(query)
+                binding.searchView.hide()
+                true
+            } else {
+                false
+            }
+        }
 
         binding.chipAll.setOnClickListener {
             viewModel.showAll()
@@ -79,6 +101,7 @@ class BooksFragment : Fragment() {
                     binding.progressBar.visibility = View.VISIBLE
                     binding.emptyView.visibility = View.GONE
                 }
+
                 is Resource.Success -> {
                     binding.progressBar.visibility = View.GONE
                     if (resource.data.isEmpty()) {
@@ -90,6 +113,7 @@ class BooksFragment : Fragment() {
                         bookAdapter.submitList(resource.data)
                     }
                 }
+
                 is Resource.Error -> {
                     binding.progressBar.visibility = View.GONE
                     Toast.makeText(requireContext(), resource.message, Toast.LENGTH_SHORT).show()

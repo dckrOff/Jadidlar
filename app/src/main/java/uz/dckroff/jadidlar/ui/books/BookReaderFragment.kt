@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.rajat.pdfviewer.PdfRendererView
 import uz.dckroff.jadidlar.databinding.FragmentBookReaderBinding
@@ -14,10 +15,11 @@ import uz.dckroff.jadidlar.databinding.FragmentBookReaderBinding
 class BookReaderFragment : Fragment() {
     private var _binding: FragmentBookReaderBinding? = null
     private val binding get() = _binding!!
-    
+
     private val viewModel: BookReaderViewModel by viewModels()
     private var bookId: String? = null
     private var totalPages: Int = 0
+    private var currentPageNumber: Int = 0
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -30,38 +32,38 @@ class BookReaderFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        
+
         bookId = arguments?.getString("bookId")
         val bookTitle = arguments?.getString("bookTitle")
         val pdfUrl = arguments?.getString("pdfUrl")
-        
+
         binding.toolbar.title = bookTitle
         binding.toolbar.setNavigationOnClickListener {
             findNavController().navigateUp()
         }
-        
+
         if (bookId != null) {
             viewModel.initialize(requireContext(), bookId!!)
         }
-        
+
         if (pdfUrl != null) {
             loadPdf(pdfUrl)
         }
-        
+
         setupListeners()
         observeData()
     }
 
     private fun loadPdf(url: String) {
         binding.progressBar.visibility = View.VISIBLE
-        
+
         try {
             binding.pdfView.initWithUrl(
                 url = url,
-                lifecycleCoroutineScope = viewLifecycleOwner.lifecycle,
+                lifecycleCoroutineScope = viewLifecycleOwner.lifecycleScope,
                 lifecycle = viewLifecycleOwner.lifecycle
             )
-            
+
             binding.pdfView.statusListener = object : PdfRendererView.StatusCallBack {
                 override fun onPdfLoadStart() {
                     binding.progressBar.visibility = View.VISIBLE
@@ -78,13 +80,6 @@ class BookReaderFragment : Fragment() {
                     binding.progressBar.visibility = View.GONE
                     totalPages = binding.pdfView.totalPageCount
                     binding.pageSlider.valueTo = totalPages.toFloat()
-                    
-                    viewModel.currentPage.value?.let { page ->
-                        if (page > 0 && page <= totalPages) {
-                            binding.pdfView.currentPage = page
-                        }
-                    }
-                    
                     updatePageNumber()
                 }
 
@@ -99,8 +94,21 @@ class BookReaderFragment : Fragment() {
                 }
 
                 override fun onPageChanged(currentPage: Int, totalPage: Int) {
+                    currentPageNumber = currentPage
                     bookId?.let { viewModel.saveCurrentPage(it, currentPage) }
                     updatePageNumber()
+                }
+
+                override fun onPdfRenderStart() {
+                }
+
+                override fun onPdfRenderSuccess() {
+                    // Восстанавливаем сохраненную позицию
+                    viewModel.currentPage.value?.let { page ->
+                        if (page >= 0 && page < totalPages) {
+                            binding.pdfView.jumpToPage(page)
+                        }
+                    }
                 }
             }
         } catch (e: Exception) {
@@ -116,23 +124,21 @@ class BookReaderFragment : Fragment() {
 
     private fun setupListeners() {
         binding.buttonPreviousPage.setOnClickListener {
-            val currentPage = binding.pdfView.currentPage
-            if (currentPage > 0) {
-                binding.pdfView.currentPage = currentPage - 1
+            if (currentPageNumber > 0) {
+                binding.pdfView.jumpToPage(currentPageNumber - 1)
             }
         }
 
         binding.buttonNextPage.setOnClickListener {
-            val currentPage = binding.pdfView.currentPage
-            if (currentPage < totalPages - 1) {
-                binding.pdfView.currentPage = currentPage + 1
+            if (currentPageNumber < totalPages - 1) {
+                binding.pdfView.jumpToPage(currentPageNumber + 1)
             }
         }
 
         binding.pageSlider.addOnChangeListener { _, value, fromUser ->
             if (fromUser) {
                 val page = value.toInt() - 1
-                binding.pdfView.currentPage = page
+                binding.pdfView.jumpToPage(page)
             }
         }
     }
@@ -144,18 +150,17 @@ class BookReaderFragment : Fragment() {
     }
 
     private fun updatePageNumber() {
-        val currentPage = binding.pdfView.currentPage + 1
-        binding.textPageNumber.text = "$currentPage / $totalPages sahifa"
-        binding.pageSlider.value = currentPage.toFloat()
-        
-        binding.buttonPreviousPage.isEnabled = currentPage > 1
-        binding.buttonNextPage.isEnabled = currentPage < totalPages
+        val displayPage = currentPageNumber + 1
+        binding.textPageNumber.text = "$displayPage / $totalPages sahifa"
+        binding.pageSlider.value = displayPage.toFloat()
+
+        binding.buttonPreviousPage.isEnabled = currentPageNumber > 0
+        binding.buttonNextPage.isEnabled = currentPageNumber < totalPages - 1
     }
 
     override fun onPause() {
         super.onPause()
-        val currentPage = binding.pdfView.currentPage
-        bookId?.let { viewModel.saveCurrentPage(it, currentPage) }
+        bookId?.let { viewModel.saveCurrentPage(it, currentPageNumber) }
     }
 
     override fun onDestroyView() {

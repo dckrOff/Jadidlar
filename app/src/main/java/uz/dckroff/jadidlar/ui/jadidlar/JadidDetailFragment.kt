@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -21,7 +22,7 @@ import uz.dckroff.jadidlar.utils.Resource
 class JadidDetailFragment : Fragment() {
     private var _binding: FragmentJadidDetailBinding? = null
     private val binding get() = _binding!!
-    
+
     private val viewModel: JadidDetailViewModel by viewModels()
     private lateinit var bookAdapter: BookAdapter
     private lateinit var favoritesManager: FavoritesManager
@@ -38,16 +39,16 @@ class JadidDetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        
+
         favoritesManager = FavoritesManager(requireContext())
-        
+
         val jadidId = arguments?.getString("jadidId")
         if (jadidId != null) {
             currentJadidId = jadidId
             viewModel.loadJadid(jadidId)
             AnalyticsHelper.logJadidViewed(requireContext(), jadidId)
         }
-        
+
         setupAdapter()
         setupListeners()
         observeData()
@@ -80,7 +81,7 @@ class JadidDetailFragment : Fragment() {
                     binding.textName.text = jadid.name
                     binding.textYears.text = "(${jadid.birthYear} – ${jadid.deathYear})"
                     binding.textBiography.text = jadid.shortDescription
-                    
+
                     Glide.with(this)
                         .load(jadid.imageUrl)
                         .placeholder(R.drawable.sample_jadid)
@@ -88,6 +89,7 @@ class JadidDetailFragment : Fragment() {
                         .centerCrop()
                         .into(binding.imagePortrait)
                 }
+
                 is Resource.Error -> {
                     Toast.makeText(requireContext(), resource.message, Toast.LENGTH_SHORT).show()
                 }
@@ -99,11 +101,12 @@ class JadidDetailFragment : Fragment() {
                 is Resource.Loading -> {}
                 is Resource.Success -> {
                     bookAdapter.submitList(resource.data)
-                    binding.recyclerAsarlar.visibility = 
+                    binding.recyclerAsarlar.visibility =
                         if (resource.data.isEmpty()) View.GONE else View.VISIBLE
-                    binding.textAsarlarHeader.visibility = 
+                    binding.textAsarlarHeader.visibility =
                         if (resource.data.isEmpty()) View.GONE else View.VISIBLE
                 }
+
                 is Resource.Error -> {}
             }
         }
@@ -111,7 +114,7 @@ class JadidDetailFragment : Fragment() {
         viewModel.isDescriptionExpanded.observe(viewLifecycleOwner) { isExpanded ->
             binding.textBiography.maxLines = if (isExpanded) Int.MAX_VALUE else 5
             binding.buttonMore.text = if (isExpanded) "Qisqartirish" else "Batafsil"
-            
+
             if (isExpanded) {
                 viewModel.jadid.value?.let { resource ->
                     if (resource is Resource.Success) {

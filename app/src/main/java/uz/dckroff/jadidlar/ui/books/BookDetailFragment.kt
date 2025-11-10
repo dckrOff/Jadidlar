@@ -24,7 +24,7 @@ import uz.dckroff.jadidlar.utils.Resource
 class BookDetailFragment : Fragment() {
     private var _binding: FragmentBookDetailBinding? = null
     private val binding get() = _binding!!
-    
+
     private val viewModel: BookDetailViewModel by viewModels()
     private lateinit var otherBooksAdapter: BookAdapter
     private var currentBookId: String? = null
@@ -40,12 +40,12 @@ class BookDetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        
+
         currentBookId = arguments?.getString("bookId")
         if (currentBookId != null) {
             viewModel.loadBook(currentBookId!!, requireContext())
         }
-        
+
         setupAdapter()
         setupListeners()
         setupMenu()
@@ -66,10 +66,11 @@ class BookDetailFragment : Fragment() {
         }
 
         binding.buttonStartReading.setOnClickListener {
-            val book = (viewModel.book.value as? Resource.Success)?.data ?: return@setOnClickListener
-            
+            val book =
+                (viewModel.book.value as? Resource.Success)?.data ?: return@setOnClickListener
+
             AnalyticsHelper.logReadingStarted(requireContext(), book.id)
-            
+
             val bundle = bundleOf(
                 "bookId" to book.id,
                 "bookTitle" to book.title,
@@ -79,7 +80,8 @@ class BookDetailFragment : Fragment() {
         }
 
         binding.textAuthorName.setOnClickListener {
-            val book = (viewModel.book.value as? Resource.Success)?.data ?: return@setOnClickListener
+            val book =
+                (viewModel.book.value as? Resource.Success)?.data ?: return@setOnClickListener
             val bundle = bundleOf("jadidId" to book.authorId)
             findNavController().navigate(R.id.action_bookDetail_to_jadidDetail, bundle)
         }
@@ -100,6 +102,7 @@ class BookDetailFragment : Fragment() {
                         }
                         true
                     }
+
                     R.id.action_download -> {
                         val book = (viewModel.book.value as? Resource.Success)?.data
                         if (book != null) {
@@ -116,6 +119,7 @@ class BookDetailFragment : Fragment() {
                         }
                         true
                     }
+
                     else -> false
                 }
             }
@@ -128,10 +132,12 @@ class BookDetailFragment : Fragment() {
                 is Resource.Loading -> {
                     binding.progressBar.visibility = View.VISIBLE
                 }
+
                 is Resource.Success -> {
                     binding.progressBar.visibility = View.GONE
                     displayBook(resource.data)
                 }
+
                 is Resource.Error -> {
                     binding.progressBar.visibility = View.GONE
                     Toast.makeText(requireContext(), resource.message, Toast.LENGTH_SHORT).show()
@@ -148,6 +154,7 @@ class BookDetailFragment : Fragment() {
                         otherBooksAdapter.submitList(resource.data)
                     }
                 }
+
                 else -> {}
             }
         }
@@ -168,7 +175,7 @@ class BookDetailFragment : Fragment() {
         binding.textPublishYear.text = "${book.publishYear}-yil"
         binding.textRating.text = "${book.rating} o'qilgan"
         binding.textDescription.text = book.description
-        
+
         Glide.with(this)
             .load(book.coverImageUrl)
             .placeholder(R.drawable.sample_book)
