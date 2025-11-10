@@ -1,0 +1,79 @@
+package uz.dckroff.jadidlar.ui.quiz
+
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Toast
+import androidx.core.os.bundleOf
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import uz.dckroff.jadidlar.R
+import uz.dckroff.jadidlar.databinding.FragmentQuizListBinding
+import uz.dckroff.jadidlar.ui.adapters.QuizAdapter
+import uz.dckroff.jadidlar.utils.Resource
+
+class QuizListFragment : Fragment() {
+    private var _binding: FragmentQuizListBinding? = null
+    private val binding get() = _binding!!
+    
+    private val viewModel: QuizListViewModel by viewModels()
+    private lateinit var quizAdapter: QuizAdapter
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentQuizListBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setupAdapter()
+        observeData()
+    }
+
+    private fun setupAdapter() {
+        quizAdapter = QuizAdapter { test ->
+            val bundle = bundleOf("testId" to test.id)
+            findNavController().navigate(R.id.action_quizList_to_quizSession, bundle)
+        }
+        binding.rvQuiz.adapter = quizAdapter
+    }
+
+    private fun observeData() {
+        viewModel.tests.observe(viewLifecycleOwner) { resource ->
+            when (resource) {
+                is Resource.Loading -> {
+                    binding.progressBar.visibility = View.VISIBLE
+                    binding.emptyView.visibility = View.GONE
+                    binding.errorView.root.visibility = View.GONE
+                }
+                is Resource.Success -> {
+                    binding.progressBar.visibility = View.GONE
+                    if (resource.data.isEmpty()) {
+                        binding.emptyView.visibility = View.VISIBLE
+                        binding.rvQuiz.visibility = View.GONE
+                    } else {
+                        binding.emptyView.visibility = View.GONE
+                        binding.rvQuiz.visibility = View.VISIBLE
+                        quizAdapter.submitList(resource.data)
+                    }
+                }
+                is Resource.Error -> {
+                    binding.progressBar.visibility = View.GONE
+                    binding.errorView.root.visibility = View.VISIBLE
+                    Toast.makeText(requireContext(), resource.message, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+}
