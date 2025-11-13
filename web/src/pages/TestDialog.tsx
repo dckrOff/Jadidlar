@@ -151,7 +151,7 @@ export default function TestDialog({ open, test, onClose, onSave }: TestDialogPr
             {formData.questions.map((question, qIndex) => (
               <Paper key={question.id} sx={{ p: 2, mb: 2 }}>
                 <Box display="flex" justifyContent="space-between" alignItems="start" mb={2}>
-                  <Typography variant="subtitle1">Savol {qIndex + 1}</Typography>
+                  <Typography variant="subtitle1">{qIndex + 1} - savol</Typography>
                   <IconButton size="small" onClick={() => removeQuestion(qIndex)}>
                     <Delete />
                   </IconButton>

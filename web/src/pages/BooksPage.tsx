@@ -30,12 +30,19 @@ export default function BooksPage() {
   const [deleteDialog, setDeleteDialog] = useState<{ open: boolean; id: string }>({ open: false, id: '' });
 
   const loadBooks = async () => {
+    console.log('[BooksPage] loadBooks() - Начало загрузки');
     try {
       setLoading(true);
       setError('');
       const data = await bookService.getAll();
+      console.log(`[BooksPage] loadBooks() - Успешно загружено ${data.length} книг`);
       setBooks(data);
     } catch (err) {
+      console.error('[BooksPage] loadBooks() - ОШИБКА:', err);
+      console.error('[BooksPage] loadBooks() - Детали ошибки:', {
+        message: err instanceof Error ? err.message : String(err),
+        stack: err instanceof Error ? err.stack : undefined
+      });
       setError('Ma\'lumotlarni yuklashda xatolik yuz berdi');
     } finally {
       setLoading(false);
@@ -57,11 +64,19 @@ export default function BooksPage() {
   };
 
   const handleDelete = async () => {
+    console.log(`[BooksPage] handleDelete() - Начало удаления книги с ID: ${deleteDialog.id}`);
     try {
       await bookService.delete(deleteDialog.id);
+      console.log(`[BooksPage] handleDelete() - Книга успешно удалена`);
       setDeleteDialog({ open: false, id: '' });
       loadBooks();
     } catch (err) {
+      console.error(`[BooksPage] handleDelete() - ОШИБКА при удалении:`, err);
+      console.error(`[BooksPage] handleDelete() - Детали ошибки:`, {
+        message: err instanceof Error ? err.message : String(err),
+        stack: err instanceof Error ? err.stack : undefined,
+        id: deleteDialog.id
+      });
       setError('O\'chirishda xatolik yuz berdi');
     }
   };

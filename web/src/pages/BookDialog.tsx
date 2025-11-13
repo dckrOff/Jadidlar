@@ -67,11 +67,17 @@ export default function BookDialog({ open, book, onClose, onSave }: BookDialogPr
   }, [book, open]);
 
   const loadJadids = async () => {
+    console.log('[BookDialog] loadJadids() - Начало загрузки джадидов');
     try {
       const data = await jadidService.getAll();
+      console.log(`[BookDialog] loadJadids() - Успешно загружено ${data.length} джадидов`);
       setJadids(data);
     } catch (err) {
-      console.error('Failed to load jadids', err);
+      console.error('[BookDialog] loadJadids() - ОШИБКА при загрузке джадидов:', err);
+      console.error('[BookDialog] loadJadids() - Детали ошибки:', {
+        message: err instanceof Error ? err.message : String(err),
+        stack: err instanceof Error ? err.stack : undefined
+      });
     }
   };
 
@@ -106,15 +112,37 @@ export default function BookDialog({ open, book, onClose, onSave }: BookDialogPr
   };
 
   const handleSubmit = async () => {
+    console.log('[BookDialog] handleSubmit() - Начало сохранения', {
+      isEdit: !!book,
+      bookId: book?.id,
+      formData,
+      hasCoverFile: !!coverFile,
+      coverFileName: coverFile?.name,
+      hasPdfFile: !!pdfFile,
+      pdfFileName: pdfFile?.name
+    });
     try {
       setSaving(true);
       if (book) {
+        console.log('[BookDialog] handleSubmit() - Обновление существующей книги');
         await bookService.update(book.id, formData, coverFile || undefined, pdfFile || undefined);
+        console.log('[BookDialog] handleSubmit() - Книга успешно обновлена');
       } else {
-        await bookService.create(formData, coverFile || undefined, pdfFile || undefined);
+        console.log('[BookDialog] handleSubmit() - Создание новой книги');
+        const newId = await bookService.create(formData, coverFile || undefined, pdfFile || undefined);
+        console.log('[BookDialog] handleSubmit() - Книга успешно создана с ID:', newId);
       }
       onSave();
     } catch (err) {
+      console.error('[BookDialog] handleSubmit() - ОШИБКА при сохранении:', err);
+      console.error('[BookDialog] handleSubmit() - Детали ошибки:', {
+        message: err instanceof Error ? err.message : String(err),
+        stack: err instanceof Error ? err.stack : undefined,
+        name: err instanceof Error ? err.name : undefined,
+        formData,
+        hasCoverFile: !!coverFile,
+        hasPdfFile: !!pdfFile
+      });
       alert('Saqlashda xatolik yuz berdi');
     } finally {
       setSaving(false);

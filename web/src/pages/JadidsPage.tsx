@@ -30,12 +30,19 @@ export default function JadidsPage() {
   const [deleteDialog, setDeleteDialog] = useState<{ open: boolean; id: string }>({ open: false, id: '' });
 
   const loadJadids = async () => {
+    console.log('[JadidsPage] loadJadids() - Начало загрузки');
     try {
       setLoading(true);
       setError('');
       const data = await jadidService.getAll();
+      console.log(`[JadidsPage] loadJadids() - Успешно загружено ${data.length} джадидов`);
       setJadids(data);
     } catch (err) {
+      console.error('[JadidsPage] loadJadids() - ОШИБКА:', err);
+      console.error('[JadidsPage] loadJadids() - Детали ошибки:', {
+        message: err instanceof Error ? err.message : String(err),
+        stack: err instanceof Error ? err.stack : undefined
+      });
       setError('Ma\'lumotlarni yuklashda xatolik yuz berdi');
     } finally {
       setLoading(false);
@@ -57,11 +64,19 @@ export default function JadidsPage() {
   };
 
   const handleDelete = async () => {
+    console.log(`[JadidsPage] handleDelete() - Начало удаления джадида с ID: ${deleteDialog.id}`);
     try {
       await jadidService.delete(deleteDialog.id);
+      console.log(`[JadidsPage] handleDelete() - Джадид успешно удален`);
       setDeleteDialog({ open: false, id: '' });
       loadJadids();
     } catch (err) {
+      console.error(`[JadidsPage] handleDelete() - ОШИБКА при удалении:`, err);
+      console.error(`[JadidsPage] handleDelete() - Детали ошибки:`, {
+        message: err instanceof Error ? err.message : String(err),
+        stack: err instanceof Error ? err.stack : undefined,
+        id: deleteDialog.id
+      });
       setError('O\'chirishda xatolik yuz berdi');
     }
   };

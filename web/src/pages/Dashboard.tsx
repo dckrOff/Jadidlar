@@ -20,22 +20,31 @@ export default function Dashboard() {
   const [error, setError] = useState('');
 
   const loadStats = async () => {
+    console.log('[Dashboard] loadStats() - Начало загрузки статистики');
     try {
       setLoading(true);
       setError('');
+      console.log('[Dashboard] loadStats() - Запрос данных из всех сервисов...');
       const [jadids, books, tests, results] = await Promise.all([
         jadidService.getAll(),
         bookService.getAll(),
         testService.getAll(),
         testService.getResults()
       ]);
-      setStats({
+      const statsData = {
         jadidsCount: jadids.length,
         booksCount: books.length,
         testsCount: tests.length,
         resultsCount: results.length
-      });
+      };
+      console.log('[Dashboard] loadStats() - Статистика успешно загружена:', statsData);
+      setStats(statsData);
     } catch (err) {
+      console.error('[Dashboard] loadStats() - ОШИБКА:', err);
+      console.error('[Dashboard] loadStats() - Детали ошибки:', {
+        message: err instanceof Error ? err.message : String(err),
+        stack: err instanceof Error ? err.stack : undefined
+      });
       setError('Ma\'lumotlarni yuklashda xatolik yuz berdi');
     } finally {
       setLoading(false);

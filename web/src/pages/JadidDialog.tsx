@@ -68,15 +68,34 @@ export default function JadidDialog({ open, jadid, onClose, onSave }: JadidDialo
   };
 
   const handleSubmit = async () => {
+    console.log('[JadidDialog] handleSubmit() - Начало сохранения', {
+      isEdit: !!jadid,
+      jadidId: jadid?.id,
+      formData,
+      hasImageFile: !!imageFile,
+      imageFileName: imageFile?.name
+    });
     try {
       setSaving(true);
       if (jadid) {
+        console.log('[JadidDialog] handleSubmit() - Обновление существующего джадида');
         await jadidService.update(jadid.id, formData, imageFile || undefined);
+        console.log('[JadidDialog] handleSubmit() - Джадид успешно обновлен');
       } else {
-        await jadidService.create(formData, imageFile || undefined);
+        console.log('[JadidDialog] handleSubmit() - Создание нового джадида');
+        const newId = await jadidService.create(formData, imageFile || undefined);
+        console.log('[JadidDialog] handleSubmit() - Джадид успешно создан с ID:', newId);
       }
       onSave();
     } catch (err) {
+      console.error('[JadidDialog] handleSubmit() - ОШИБКА при сохранении:', err);
+      console.error('[JadidDialog] handleSubmit() - Детали ошибки:', {
+        message: err instanceof Error ? err.message : String(err),
+        stack: err instanceof Error ? err.stack : undefined,
+        name: err instanceof Error ? err.name : undefined,
+        formData,
+        hasImageFile: !!imageFile
+      });
       alert('Saqlashda xatolik yuz berdi');
     } finally {
       setSaving(false);

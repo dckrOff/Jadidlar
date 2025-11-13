@@ -29,12 +29,19 @@ export default function TestsPage() {
   const [deleteDialog, setDeleteDialog] = useState<{ open: boolean; id: string }>({ open: false, id: '' });
 
   const loadTests = async () => {
+    console.log('[TestsPage] loadTests() - Начало загрузки');
     try {
       setLoading(true);
       setError('');
       const data = await testService.getAll();
+      console.log(`[TestsPage] loadTests() - Успешно загружено ${data.length} тестов`);
       setTests(data);
     } catch (err) {
+      console.error('[TestsPage] loadTests() - ОШИБКА:', err);
+      console.error('[TestsPage] loadTests() - Детали ошибки:', {
+        message: err instanceof Error ? err.message : String(err),
+        stack: err instanceof Error ? err.stack : undefined
+      });
       setError('Ma\'lumotlarni yuklashda xatolik yuz berdi');
     } finally {
       setLoading(false);
@@ -56,11 +63,19 @@ export default function TestsPage() {
   };
 
   const handleDelete = async () => {
+    console.log(`[TestsPage] handleDelete() - Начало удаления теста с ID: ${deleteDialog.id}`);
     try {
       await testService.delete(deleteDialog.id);
+      console.log(`[TestsPage] handleDelete() - Тест успешно удален`);
       setDeleteDialog({ open: false, id: '' });
       loadTests();
     } catch (err) {
+      console.error(`[TestsPage] handleDelete() - ОШИБКА при удалении:`, err);
+      console.error(`[TestsPage] handleDelete() - Детали ошибки:`, {
+        message: err instanceof Error ? err.message : String(err),
+        stack: err instanceof Error ? err.stack : undefined,
+        id: deleteDialog.id
+      });
       setError('O\'chirishda xatolik yuz berdi');
     }
   };

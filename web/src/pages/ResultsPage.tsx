@@ -23,12 +23,19 @@ export default function ResultsPage() {
   const [error, setError] = useState('');
 
   const loadResults = async () => {
+    console.log('[ResultsPage] loadResults() - Начало загрузки');
     try {
       setLoading(true);
       setError('');
       const data = await testService.getResults();
+      console.log(`[ResultsPage] loadResults() - Успешно загружено ${data.length} результатов`);
       setResults(data);
     } catch (err) {
+      console.error('[ResultsPage] loadResults() - ОШИБКА:', err);
+      console.error('[ResultsPage] loadResults() - Детали ошибки:', {
+        message: err instanceof Error ? err.message : String(err),
+        stack: err instanceof Error ? err.stack : undefined
+      });
       setError('Ma\'lumotlarni yuklashda xatolik yuz berdi');
     } finally {
       setLoading(false);
