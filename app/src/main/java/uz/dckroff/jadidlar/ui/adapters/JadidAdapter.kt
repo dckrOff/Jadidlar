@@ -37,8 +37,8 @@ class JadidAdapter(
             
             Glide.with(binding.root.context)
                 .load(jadid.imageUrl)
-                .placeholder(R.drawable.sample_jadid)
-                .error(R.drawable.sample_jadid)
+                .placeholder(R.drawable.img_placeholder)
+                .error(R.drawable.img_placeholder)
                 .centerCrop()
                 .into(binding.imageJadid)
             

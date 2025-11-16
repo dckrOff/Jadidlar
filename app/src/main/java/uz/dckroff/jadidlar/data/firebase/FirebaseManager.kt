@@ -1,13 +1,11 @@
 package uz.dckroff.jadidlar.data.firebase
 
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 
 object FirebaseManager {
     val firestore: FirebaseFirestore by lazy { FirebaseFirestore.getInstance() }
-    val storage: FirebaseStorage by lazy { FirebaseStorage.getInstance() }
     
     fun getAnalytics(context: android.content.Context): FirebaseAnalytics {
         return FirebaseAnalytics.getInstance(context)

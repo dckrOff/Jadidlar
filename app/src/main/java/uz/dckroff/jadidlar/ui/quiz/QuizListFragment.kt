@@ -17,7 +17,6 @@ import uz.dckroff.jadidlar.utils.Resource
 class QuizListFragment : Fragment() {
     private var _binding: FragmentQuizListBinding? = null
     private val binding get() = _binding!!
-    
     private val viewModel: QuizListViewModel by viewModels()
     private lateinit var quizAdapter: QuizAdapter
 
@@ -41,7 +40,10 @@ class QuizListFragment : Fragment() {
             val bundle = bundleOf("testId" to test.id)
             findNavController().navigate(R.id.action_quizList_to_quizSession, bundle)
         }
-        binding.rvQuiz.adapter = quizAdapter
+        binding.rvQuiz.apply {
+            layoutManager = androidx.recyclerview.widget.LinearLayoutManager(requireContext())
+            adapter = quizAdapter
+        }
     }
 
     private fun observeData() {
@@ -52,6 +54,7 @@ class QuizListFragment : Fragment() {
                     binding.emptyView.visibility = View.GONE
                     binding.errorView.root.visibility = View.GONE
                 }
+
                 is Resource.Success -> {
                     binding.progressBar.visibility = View.GONE
                     if (resource.data.isEmpty()) {
@@ -63,6 +66,7 @@ class QuizListFragment : Fragment() {
                         quizAdapter.submitList(resource.data)
                     }
                 }
+
                 is Resource.Error -> {
                     binding.progressBar.visibility = View.GONE
                     binding.errorView.root.visibility = View.VISIBLE

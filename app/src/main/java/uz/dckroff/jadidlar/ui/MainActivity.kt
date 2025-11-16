@@ -1,6 +1,7 @@
 package uz.dckroff.jadidlar.ui
 
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
@@ -24,5 +25,26 @@ class MainActivity : AppCompatActivity() {
         val navController = navHostFragment.navController
         
         binding.bottomNavigation.setupWithNavController(navController)
+        
+        // Скрывать/показывать BottomNavigation в зависимости от фрагмента
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            when (destination.id) {
+                // Главные экраны - показываем bottom navigation
+                R.id.homeFragment,
+                R.id.jadidlarFragment,
+                R.id.booksFragment,
+                R.id.quizListFragment -> {
+                    binding.bottomNavigation.visibility = View.VISIBLE
+                }
+                // Детальные экраны - скрываем bottom navigation
+                R.id.bookReaderFragment,
+                R.id.bookDetailFragment,
+                R.id.jadidDetailFragment,
+                R.id.quizSessionFragment,
+                R.id.quizResultsFragment -> {
+                    binding.bottomNavigation.visibility = View.GONE
+                }
+            }
+        }
     }
 }

@@ -84,10 +84,9 @@ class JadidDetailFragment : Fragment() {
 
                     Glide.with(this)
                         .load(jadid.imageUrl)
-                        .placeholder(R.drawable.sample_jadid)
-                        .error(R.drawable.sample_jadid)
-                        .centerCrop()
-                        .into(binding.imagePortrait)
+                        .placeholder(R.drawable.img_placeholder)
+                        .error(R.drawable.img_placeholder)
+                        .   into(binding.imagePortrait)
                 }
 
                 is Resource.Error -> {

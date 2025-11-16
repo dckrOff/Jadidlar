@@ -22,7 +22,7 @@
             android:layout_height="120dp"
             android:layout_marginEnd="12dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/sample_book"
+            android:src="@drawable/img_placeholder"
             app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Small" />
 
         <LinearLayout

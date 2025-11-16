@@ -29,6 +29,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
+        <!--TODO-->
         <LinearLayout
             android:id="@+id/pageControlsLayout"
             android:layout_width="match_parent"
@@ -37,7 +38,8 @@
             android:background="@color/white"
             android:elevation="4dp"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:padding="16dp"
+            android:visibility="gone">
 
             <TextView
                 android:id="@+id/textPageNumber"

@@ -10,7 +10,10 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.rajat.pdfviewer.PdfRendererView
+import kotlinx.coroutines.launch
 import uz.dckroff.jadidlar.databinding.FragmentBookReaderBinding
+import uz.dckroff.jadidlar.utils.DownloadUtils
+import java.io.File
 
 class BookReaderFragment : Fragment() {
     private var _binding: FragmentBookReaderBinding? = null
@@ -55,15 +58,58 @@ class BookReaderFragment : Fragment() {
     }
 
     private fun loadPdf(url: String) {
+        if (bookId == null) {
+            binding.progressBar.visibility = View.GONE
+            binding.errorView.visibility = View.VISIBLE
+            Toast.makeText(
+                requireContext(),
+                "Book ID not found",
+                Toast.LENGTH_SHORT
+            ).show()
+            return
+        }
+        
         binding.progressBar.visibility = View.VISIBLE
-
+        binding.errorView.visibility = View.GONE
+        
+        viewLifecycleOwner.lifecycleScope.launch {
+            try {
+                val cacheFile = DownloadUtils.getPdfCacheFile(requireContext(), bookId!!)
+                
+                if (cacheFile.exists() && cacheFile.length() > 0) {
+                    openPdfFromCache(cacheFile)
+                } else {
+                    binding.progressBar.visibility = View.VISIBLE
+                    val downloadedFile = DownloadUtils.downloadPdfToCache(requireContext(), url, bookId!!)
+                    
+                    if (downloadedFile != null && downloadedFile.exists()) {
+                        openPdfFromCache(downloadedFile)
+                    } else {
+                        binding.progressBar.visibility = View.GONE
+                        binding.errorView.visibility = View.VISIBLE
+                        Toast.makeText(
+                            requireContext(),
+                            "PDF yuklashda xatolik yuz berdi",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            } catch (e: Exception) {
+                binding.progressBar.visibility = View.GONE
+                binding.errorView.visibility = View.VISIBLE
+                Toast.makeText(
+                    requireContext(),
+                    "Xatolik: ${e.message}",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+    }
+    
+    private fun openPdfFromCache(pdfFile: File) {
         try {
-            binding.pdfView.initWithUrl(
-                url = url,
-                lifecycleCoroutineScope = viewLifecycleOwner.lifecycleScope,
-                lifecycle = viewLifecycleOwner.lifecycle
-            )
-
+            binding.pdfView.initWithFile(file = pdfFile)
+            
             binding.pdfView.statusListener = object : PdfRendererView.StatusCallBack {
                 override fun onPdfLoadStart() {
                     binding.progressBar.visibility = View.VISIBLE
@@ -80,6 +126,14 @@ class BookReaderFragment : Fragment() {
                     binding.progressBar.visibility = View.GONE
                     totalPages = binding.pdfView.totalPageCount
                     binding.pageSlider.valueTo = totalPages.toFloat()
+                    
+                    viewModel.currentPage.value?.let { savedPage ->
+                        if (savedPage >= 0 && savedPage < totalPages) {
+                            binding.pdfView.jumpToPage(savedPage)
+                            currentPageNumber = savedPage
+                        }
+                    }
+                    
                     updatePageNumber()
                 }
 
@@ -88,7 +142,7 @@ class BookReaderFragment : Fragment() {
                     binding.errorView.visibility = View.VISIBLE
                     Toast.makeText(
                         requireContext(),
-                        "PDF yuklashda xatolik: ${error.message}",
+                        "PDF ochishda xatolik: ${error.message}",
                         Toast.LENGTH_SHORT
                     ).show()
                 }
@@ -103,12 +157,6 @@ class BookReaderFragment : Fragment() {
                 }
 
                 override fun onPdfRenderSuccess() {
-                    // Восстанавливаем сохраненную позицию
-                    viewModel.currentPage.value?.let { page ->
-                        if (page >= 0 && page < totalPages) {
-                            binding.pdfView.jumpToPage(page)
-                        }
-                    }
                 }
             }
         } catch (e: Exception) {
@@ -116,7 +164,7 @@ class BookReaderFragment : Fragment() {
             binding.errorView.visibility = View.VISIBLE
             Toast.makeText(
                 requireContext(),
-                "Xatolik: ${e.message}",
+                "PDF ochishda xatolik: ${e.message}",
                 Toast.LENGTH_SHORT
             ).show()
         }

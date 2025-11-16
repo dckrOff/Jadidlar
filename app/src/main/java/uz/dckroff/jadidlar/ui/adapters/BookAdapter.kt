@@ -38,8 +38,8 @@ class BookAdapter(
             
             Glide.with(binding.root.context)
                 .load(book.coverImageUrl)
-                .placeholder(R.drawable.sample_book)
-                .error(R.drawable.sample_book)
+                .placeholder(R.drawable.img_placeholder)
+                .error(R.drawable.img_placeholder)
                 .centerCrop()
                 .into(binding.imageBook)
             

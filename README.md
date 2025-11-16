@@ -7,7 +7,7 @@
 - **Платформа**: Android
 - **Язык**: Kotlin
 - **Архитектура**: MVVM + Clean Architecture
-- **Backend**: Firebase (Firestore, Storage, Analytics, Crashlytics)
+- **Backend**: Firebase (Firestore, Analytics, Crashlytics), Google Drive (хранение файлов)
 - **UI**: Material Design 3, ViewBinding
 - **Библиотеки**:
   - Navigation Component
@@ -114,7 +114,7 @@ uz.dckroff.jadidlar/
   "deathYear": 1919,
   "shortDescription": "O'zbek jadidchilik harakatining yirik namoyandasi...",
   "fullDescription": "Batafsil biografiya...",
-  "imageUrl": "https://firebasestorage.googleapis.com/...",
+  "imageUrl": "https://lh3.googleusercontent.com/d/FILE_ID",
   "orderIndex": 1
 }
 ```
@@ -128,8 +128,8 @@ uz.dckroff.jadidlar/
   "authorName": "Mahmudxo'ja Behbudiy",
   "publishYear": 1917,
   "description": "Kitob tavsifi...",
-  "coverImageUrl": "https://firebasestorage.googleapis.com/...",
-  "pdfUrl": "https://firebasestorage.googleapis.com/...",
+  "coverImageUrl": "https://lh3.googleusercontent.com/d/FILE_ID",
+  "pdfUrl": "https://drive.google.com/file/d/FILE_ID/view",
   "rating": 150,
   "isFavorite": false,
   "orderIndex": 1
@@ -183,22 +183,12 @@ service cloud.firestore {
 }
 ```
 
-#### Storage Rules:
-```javascript
-rules_version = '2';
-service firebase.storage {
-  match /b/{bucket}/o {
-    match /images/{allPaths=**} {
-      allow read: if true;
-      allow write: if false;
-    }
-    match /books/{allPaths=**} {
-      allow read: if true;
-      allow write: if false;
-    }
-  }
-}
-```
+#### Google Drive:
+- Файлы (изображения, PDF) хранятся в Google Drive
+- Используются публичные ссылки, авторизация не требуется
+- Формат для изображений: `https://lh3.googleusercontent.com/d/FILE_ID`
+- Формат для PDF в Firestore: `https://drive.google.com/file/d/FILE_ID/view`
+- Приложение автоматически конвертирует PDF URL в формат прямой загрузки
 
 ### 4. Сборка проекта
 

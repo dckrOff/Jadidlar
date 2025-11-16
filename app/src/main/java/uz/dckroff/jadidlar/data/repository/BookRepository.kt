@@ -45,12 +45,12 @@ class BookRepository {
         return try {
             val snapshot = collection
                 .whereEqualTo("authorId", authorId)
-                .orderBy("publishYear", Query.Direction.DESCENDING)
                 .get()
                 .await()
             
             val books = snapshot.toObjects(Book::class.java)
-            Resource.Success(books)
+            val sortedBooks = books.sortedByDescending { it.publishYear }
+            Resource.Success(sortedBooks)
         } catch (e: Exception) {
             FirebaseManager.crashlytics.recordException(e)
             Resource.Error(e.message ?: "Failed to fetch books by author")
