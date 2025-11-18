@@ -6,7 +6,16 @@
     android:layout_height="match_parent"
     android:background="?attr/colorSurface">
 
+    <!-- Shimmer для детального контента -->
+    <include
+        android:id="@+id/shimmerDetail"
+        layout="@layout/shimmer_detail_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
+
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/contentScrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"

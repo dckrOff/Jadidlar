@@ -54,13 +54,16 @@ class QuizListFragment : Fragment() {
         viewModel.tests.observe(viewLifecycleOwner) { resource ->
             when (resource) {
                 is Resource.Loading -> {
-                    binding.progressBar.visibility = View.VISIBLE
+                    binding.shimmerQuiz.visibility = View.VISIBLE
+                    binding.rvQuiz.visibility = View.GONE
                     binding.emptyView.visibility = View.GONE
                     binding.errorView.root.visibility = View.GONE
+                    startShimmerAnimation()
                 }
 
                 is Resource.Success -> {
-                    binding.progressBar.visibility = View.GONE
+                    stopShimmerAnimation()
+                    binding.shimmerQuiz.visibility = View.GONE
                     try {
                         if (resource.data.isEmpty()) {
                             binding.emptyView.visibility = View.VISIBLE
@@ -76,7 +79,9 @@ class QuizListFragment : Fragment() {
                 }
 
                 is Resource.Error -> {
-                    binding.progressBar.visibility = View.GONE
+                    stopShimmerAnimation()
+                    binding.shimmerQuiz.visibility = View.GONE
+                    binding.rvQuiz.visibility = View.VISIBLE
                     binding.errorView.root.visibility = View.VISIBLE
                     ErrorHandler.showErrorWithRetry(
                         requireContext(),
@@ -85,6 +90,22 @@ class QuizListFragment : Fragment() {
                     )
                 }
             }
+        }
+    }
+
+    private fun startShimmerAnimation() {
+        val container = binding.shimmerQuiz.getChildAt(0) as? ViewGroup ?: return
+        for (i in 0 until container.childCount) {
+            val shimmerView = container.getChildAt(i) as? io.supercharge.shimmerlayout.ShimmerLayout
+            shimmerView?.startShimmerAnimation()
+        }
+    }
+
+    private fun stopShimmerAnimation() {
+        val container = binding.shimmerQuiz.getChildAt(0) as? ViewGroup ?: return
+        for (i in 0 until container.childCount) {
+            val shimmerView = container.getChildAt(i) as? io.supercharge.shimmerlayout.ShimmerLayout
+            shimmerView?.stopShimmerAnimation()
         }
     }
 

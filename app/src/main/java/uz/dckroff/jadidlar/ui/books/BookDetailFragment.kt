@@ -100,7 +100,10 @@ class BookDetailFragment : Fragment() {
                     )
                     findNavController().navigate(R.id.action_bookDetail_to_reader, bundle)
                 } else {
-                    ErrorHandler.showErrorDialog(requireContext(), message = "Kitob ma'lumotlari topilmadi")
+                    ErrorHandler.showErrorDialog(
+                        requireContext(),
+                        message = "Kitob ma'lumotlari topilmadi"
+                    )
                 }
             } catch (e: Exception) {
                 ErrorHandler.handleException(requireContext(), e, "O'qishni boshlashda xatolik")
@@ -151,7 +154,10 @@ class BookDetailFragment : Fragment() {
                                     Toast.LENGTH_SHORT
                                 ).show()
                             } else {
-                                ErrorHandler.showErrorDialog(requireContext(), message = "Kitob ma'lumotlari topilmadi")
+                                ErrorHandler.showErrorDialog(
+                                    requireContext(),
+                                    message = "Kitob ma'lumotlari topilmadi"
+                                )
                             }
                             true
                         }
@@ -170,11 +176,17 @@ class BookDetailFragment : Fragment() {
         viewModel.book.observe(viewLifecycleOwner) { resource ->
             when (resource) {
                 is Resource.Loading -> {
-                    binding.progressBar.visibility = View.VISIBLE
+                    binding.shimmerDetail.root.visibility = View.VISIBLE
+                    binding.contentScrollView.visibility = View.GONE
+                    binding.buttonStartReading.visibility = View.GONE
+                    startShimmerAnimation()
                 }
 
                 is Resource.Success -> {
-                    binding.progressBar.visibility = View.GONE
+                    stopShimmerAnimation()
+                    binding.shimmerDetail.root.visibility = View.GONE
+                    binding.contentScrollView.visibility = View.VISIBLE
+                    binding.buttonStartReading.visibility = View.VISIBLE
                     try {
                         displayBook(resource.data)
                     } catch (e: Exception) {
@@ -183,11 +195,21 @@ class BookDetailFragment : Fragment() {
                 }
 
                 is Resource.Error -> {
-                    binding.progressBar.visibility = View.GONE
+                    stopShimmerAnimation()
+                    binding.shimmerDetail.root.visibility = View.GONE
+                    binding.contentScrollView.visibility = View.VISIBLE
+                    binding.buttonStartReading.visibility = View.VISIBLE
                     ErrorHandler.showErrorWithRetry(
                         requireContext(),
                         "Kitob ma'lumotlarini yuklashda xatolik \n " + resource.message,
-                        onRetry = { currentBookId?.let { viewModel.loadBook(it, requireContext()) } },
+                        onRetry = {
+                            currentBookId?.let {
+                                viewModel.loadBook(
+                                    it,
+                                    requireContext()
+                                )
+                            }
+                        },
                         onCancel = { findNavController().navigateUp() }
                     )
                 }
@@ -224,6 +246,26 @@ class BookDetailFragment : Fragment() {
         binding.textRating.text = "${book.rating} o'qilgan"
         binding.textDescription.text = book.description
         binding.imageBookCover.loadImageSafe(book.coverImageUrl)
+    }
+
+    private fun startShimmerAnimation() {
+        findShimmerLayouts(binding.shimmerDetail.root).forEach { it.startShimmerAnimation() }
+    }
+
+    private fun stopShimmerAnimation() {
+        findShimmerLayouts(binding.shimmerDetail.root).forEach { it.stopShimmerAnimation() }
+    }
+
+    private fun findShimmerLayouts(view: View): List<io.supercharge.shimmerlayout.ShimmerLayout> {
+        val list = mutableListOf<io.supercharge.shimmerlayout.ShimmerLayout>()
+        if (view is io.supercharge.shimmerlayout.ShimmerLayout) {
+            list.add(view)
+        } else if (view is ViewGroup) {
+            for (i in 0 until view.childCount) {
+                list.addAll(findShimmerLayouts(view.getChildAt(i)))
+            }
+        }
+        return list
     }
 
     override fun onDestroyView() {

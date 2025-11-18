@@ -52,10 +52,14 @@ class JadidlarFragment : Fragment() {
         viewModel.jadids.observe(viewLifecycleOwner) { resource ->
             when (resource) {
                 is Resource.Loading -> {
-                    binding.progressBar.visibility = View.VISIBLE
+                    binding.shimmerContainer.visibility = View.VISIBLE
+                    binding.recyclerJadids.visibility = View.GONE
+                    startShimmerAnimation()
                 }
                 is Resource.Success -> {
-                    binding.progressBar.visibility = View.GONE
+                    stopShimmerAnimation()
+                    binding.shimmerContainer.visibility = View.GONE
+                    binding.recyclerJadids.visibility = View.VISIBLE
                     try {
                         jadidAdapter.submitList(resource.data)
                     } catch (e: Exception) {
@@ -63,13 +67,37 @@ class JadidlarFragment : Fragment() {
                     }
                 }
                 is Resource.Error -> {
-                    binding.progressBar.visibility = View.GONE
+                    stopShimmerAnimation()
+                    binding.shimmerContainer.visibility = View.GONE
+                    binding.recyclerJadids.visibility = View.VISIBLE
                     ErrorHandler.showErrorWithRetry(
                         requireContext(),
                         "Jadidlar ma'lumotlarini yuklashda xatolik",
                         onRetry = { viewModel.loadAllJadids() }
                     )
                 }
+            }
+        }
+    }
+
+    private fun startShimmerAnimation() {
+        val container = binding.shimmerContainer.getChildAt(0) as ViewGroup
+        for (i in 0 until container.childCount) {
+            val row = container.getChildAt(i) as? ViewGroup ?: continue
+            for (j in 0 until row.childCount) {
+                val shimmerView = row.getChildAt(j) as? io.supercharge.shimmerlayout.ShimmerLayout
+                shimmerView?.startShimmerAnimation()
+            }
+        }
+    }
+
+    private fun stopShimmerAnimation() {
+        val container = binding.shimmerContainer.getChildAt(0) as? ViewGroup ?: return
+        for (i in 0 until container.childCount) {
+            val row = container.getChildAt(i) as? ViewGroup ?: continue
+            for (j in 0 until row.childCount) {
+                val shimmerView = row.getChildAt(j) as? io.supercharge.shimmerlayout.ShimmerLayout
+                shimmerView?.stopShimmerAnimation()
             }
         }
     }

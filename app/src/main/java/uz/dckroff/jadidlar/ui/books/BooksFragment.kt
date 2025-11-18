@@ -125,12 +125,15 @@ class BooksFragment : Fragment() {
         viewModel.books.observe(viewLifecycleOwner) { resource ->
             when (resource) {
                 is Resource.Loading -> {
-                    binding.progressBar.visibility = View.VISIBLE
+                    binding.shimmerBooks.visibility = View.VISIBLE
+                    binding.recyclerBooks.visibility = View.GONE
                     binding.emptyView.visibility = View.GONE
+                    startShimmerAnimation()
                 }
 
                 is Resource.Success -> {
-                    binding.progressBar.visibility = View.GONE
+                    stopShimmerAnimation()
+                    binding.shimmerBooks.visibility = View.GONE
                     try {
                         if (resource.data.isEmpty()) {
                             binding.emptyView.visibility = View.VISIBLE
@@ -146,7 +149,9 @@ class BooksFragment : Fragment() {
                 }
 
                 is Resource.Error -> {
-                    binding.progressBar.visibility = View.GONE
+                    stopShimmerAnimation()
+                    binding.shimmerBooks.visibility = View.GONE
+                    binding.recyclerBooks.visibility = View.VISIBLE
                     ErrorHandler.showErrorWithRetry(
                         requireContext(),
                         "Kitoblar ma'lumotlarini yuklashda xatolik",
@@ -154,6 +159,20 @@ class BooksFragment : Fragment() {
                     )
                 }
             }
+        }
+    }
+
+    private fun startShimmerAnimation() {
+        for (i in 0 until binding.shimmerBooks.childCount) {
+            val shimmerView = binding.shimmerBooks.getChildAt(i) as? io.supercharge.shimmerlayout.ShimmerLayout
+            shimmerView?.startShimmerAnimation()
+        }
+    }
+
+    private fun stopShimmerAnimation() {
+        for (i in 0 until binding.shimmerBooks.childCount) {
+            val shimmerView = binding.shimmerBooks.getChildAt(i) as? io.supercharge.shimmerlayout.ShimmerLayout
+            shimmerView?.stopShimmerAnimation()
         }
     }
 

@@ -63,15 +63,25 @@ class HomeFragment : Fragment() {
     private fun observeData() {
         viewModel.jadids.observe(viewLifecycleOwner) { resource ->
             when (resource) {
-                is Resource.Loading -> {}
+                is Resource.Loading -> {
+                    binding.shimmerJadidlar.visibility = View.VISIBLE
+                    binding.recyclerJadidlar.visibility = View.GONE
+                    startShimmerAnimation(binding.shimmerJadidlar)
+                }
                 is Resource.Success -> {
                     try {
+                        stopShimmerAnimation(binding.shimmerJadidlar)
+                        binding.shimmerJadidlar.visibility = View.GONE
+                        binding.recyclerJadidlar.visibility = View.VISIBLE
                         jadidAdapter.submitList(resource.data)
                     } catch (e: Exception) {
                         ErrorHandler.handleException(requireContext(), e)
                     }
                 }
                 is Resource.Error -> {
+                    stopShimmerAnimation(binding.shimmerJadidlar)
+                    binding.shimmerJadidlar.visibility = View.GONE
+                    binding.recyclerJadidlar.visibility = View.VISIBLE
                     ErrorHandler.showErrorWithRetry(
                         requireContext(),
                         "Jadidlar ma'lumotlarini yuklashda xatolik",
@@ -83,15 +93,25 @@ class HomeFragment : Fragment() {
 
         viewModel.topBooks.observe(viewLifecycleOwner) { resource ->
             when (resource) {
-                is Resource.Loading -> {}
+                is Resource.Loading -> {
+                    binding.shimmerBooks.visibility = View.VISIBLE
+                    binding.recyclerTopAsarlar.visibility = View.GONE
+                    startShimmerAnimation(binding.shimmerBooks)
+                }
                 is Resource.Success -> {
                     try {
+                        stopShimmerAnimation(binding.shimmerBooks)
+                        binding.shimmerBooks.visibility = View.GONE
+                        binding.recyclerTopAsarlar.visibility = View.VISIBLE
                         bookAdapter.submitList(resource.data)
                     } catch (e: Exception) {
                         ErrorHandler.handleException(requireContext(), e)
                     }
                 }
                 is Resource.Error -> {
+                    stopShimmerAnimation(binding.shimmerBooks)
+                    binding.shimmerBooks.visibility = View.GONE
+                    binding.recyclerTopAsarlar.visibility = View.VISIBLE
                     ErrorHandler.showErrorWithRetry(
                         requireContext(),
                         "Kitoblar ma'lumotlarini yuklashda xatolik",
@@ -99,6 +119,20 @@ class HomeFragment : Fragment() {
                     )
                 }
             }
+        }
+    }
+
+    private fun startShimmerAnimation(container: ViewGroup) {
+        for (i in 0 until container.childCount) {
+            val shimmerView = container.getChildAt(i) as? io.supercharge.shimmerlayout.ShimmerLayout
+            shimmerView?.startShimmerAnimation()
+        }
+    }
+
+    private fun stopShimmerAnimation(container: ViewGroup) {
+        for (i in 0 until container.childCount) {
+            val shimmerView = container.getChildAt(i) as? io.supercharge.shimmerlayout.ShimmerLayout
+            shimmerView?.stopShimmerAnimation()
         }
     }
 

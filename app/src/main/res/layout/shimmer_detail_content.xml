@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <io.supercharge.shimmerlayout.ShimmerLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:shimmer_animation_duration="1200">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Placeholder для большого изображения -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:background="@color/shimmer_placeholder" />
+
+            <!-- Placeholder для заголовка -->
+            <View
+                android:layout_width="200dp"
+                android:layout_height="28dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="16dp"
+                android:background="@color/shimmer_placeholder" />
+
+            <!-- Placeholder для подзаголовка -->
+            <View
+                android:layout_width="150dp"
+                android:layout_height="18dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="8dp"
+                android:background="@color/shimmer_placeholder" />
+
+            <!-- Placeholder для описания -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="16dp"
+                android:layout_marginTop="24dp"
+                android:background="@color/shimmer_placeholder" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="16dp"
+                android:layout_marginTop="8dp"
+                android:background="@color/shimmer_placeholder" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="16dp"
+                android:layout_marginTop="8dp"
+                android:background="@color/shimmer_placeholder" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="16dp"
+                android:layout_marginTop="8dp"
+                android:background="@color/shimmer_placeholder" />
+
+            <View
+                android:layout_width="280dp"
+                android:layout_height="16dp"
+                android:layout_marginTop="8dp"
+                android:background="@color/shimmer_placeholder" />
+
+            <!-- Еще один блок текста -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="16dp"
+                android:layout_marginTop="24dp"
+                android:background="@color/shimmer_placeholder" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="16dp"
+                android:layout_marginTop="8dp"
+                android:background="@color/shimmer_placeholder" />
+
+            <View
+                android:layout_width="320dp"
+                android:layout_height="16dp"
+                android:layout_marginTop="8dp"
+                android:background="@color/shimmer_placeholder" />
+
+        </LinearLayout>
+
+    </io.supercharge.shimmerlayout.ShimmerLayout>
+
+</ScrollView>
+

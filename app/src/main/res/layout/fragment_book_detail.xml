@@ -19,7 +19,17 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
+    <!-- Shimmer для детального контента -->
+    <include
+        android:id="@+id/shimmerDetail"
+        layout="@layout/shimmer_detail_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/contentScrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true"
@@ -170,12 +180,5 @@
         android:text="@string/read"
         app:icon="@drawable/ic_arrow_forward"
         app:iconGravity="end" />
-
-    <ProgressBar
-        android:id="@+id/progressBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:visibility="gone" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

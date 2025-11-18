@@ -71,6 +71,8 @@ dependencies {
     
     implementation(libs.pdf.viewer)
     
+    implementation("io.supercharge:shimmerlayout:2.1.0")
+    
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

@@ -100,8 +100,15 @@ class JadidDetailFragment : Fragment() {
     private fun observeData() {
         viewModel.jadid.observe(viewLifecycleOwner) { resource ->
             when (resource) {
-                is Resource.Loading -> {}
+                is Resource.Loading -> {
+                    binding.shimmerDetail.root.visibility = View.VISIBLE
+                    binding.contentScrollView.visibility = View.GONE
+                    startShimmerAnimation()
+                }
                 is Resource.Success -> {
+                    stopShimmerAnimation()
+                    binding.shimmerDetail.root.visibility = View.GONE
+                    binding.contentScrollView.visibility = View.VISIBLE
                     try {
                         val jadid = resource.data
                         binding.textName.text = jadid.name
@@ -114,6 +121,9 @@ class JadidDetailFragment : Fragment() {
                 }
 
                 is Resource.Error -> {
+                    stopShimmerAnimation()
+                    binding.shimmerDetail.root.visibility = View.GONE
+                    binding.contentScrollView.visibility = View.VISIBLE
                     ErrorHandler.showErrorWithRetry(
                         requireContext(),
                         "Jadid ma'lumotlarini yuklashda xatolik \n " + resource.message,
@@ -167,6 +177,26 @@ class JadidDetailFragment : Fragment() {
                 ErrorHandler.handleException(requireContext(), e)
             }
         }
+    }
+
+    private fun startShimmerAnimation() {
+        findShimmerLayouts(binding.shimmerDetail.root).forEach { it.startShimmerAnimation() }
+    }
+
+    private fun stopShimmerAnimation() {
+        findShimmerLayouts(binding.shimmerDetail.root).forEach { it.stopShimmerAnimation() }
+    }
+
+    private fun findShimmerLayouts(view: View): List<io.supercharge.shimmerlayout.ShimmerLayout> {
+        val list = mutableListOf<io.supercharge.shimmerlayout.ShimmerLayout>()
+        if (view is io.supercharge.shimmerlayout.ShimmerLayout) {
+            list.add(view)
+        } else if (view is ViewGroup) {
+            for (i in 0 until view.childCount) {
+                list.addAll(findShimmerLayouts(view.getChildAt(i)))
+            }
+        }
+        return list
     }
 
     override fun onDestroyView() {

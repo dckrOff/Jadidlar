@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<io.supercharge.shimmerlayout.ShimmerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginEnd="8dp"
+    app:shimmer_animation_duration="1200">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <!-- Placeholder для изображения -->
+        <View
+            android:layout_width="120dp"
+            android:layout_height="160dp"
+            android:background="@color/shimmer_placeholder" />
+
+        <!-- Placeholder для имени -->
+        <View
+            android:layout_width="100dp"
+            android:layout_height="16dp"
+            android:layout_marginTop="8dp"
+            android:background="@color/shimmer_placeholder" />
+
+        <!-- Placeholder для второй строки имени -->
+        <View
+            android:layout_width="80dp"
+            android:layout_height="14dp"
+            android:layout_marginTop="4dp"
+            android:background="@color/shimmer_placeholder" />
+
+    </LinearLayout>
+
+</io.supercharge.shimmerlayout.ShimmerLayout>
+

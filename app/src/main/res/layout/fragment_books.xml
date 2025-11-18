@@ -74,6 +74,21 @@
 
             </com.google.android.material.chip.ChipGroup>
 
+            <!-- Shimmer для Books -->
+            <LinearLayout
+                android:id="@+id/shimmerBooks"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <include layout="@layout/shimmer_item_book" />
+                <include layout="@layout/shimmer_item_book" />
+                <include layout="@layout/shimmer_item_book" />
+                <include layout="@layout/shimmer_item_book" />
+                <include layout="@layout/shimmer_item_book" />
+            </LinearLayout>
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerBooks"
                 android:layout_width="match_parent"
@@ -96,12 +111,5 @@
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
-
-    <ProgressBar
-        android:id="@+id/progressBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:visibility="gone" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
