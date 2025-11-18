@@ -6,7 +6,16 @@
     android:layout_height="match_parent"
     android:background="?attr/colorSurface">
 
+    <!-- Shimmer для детального контента -->
+    <include
+        android:id="@+id/shimmerDetail"
+        layout="@layout/shimmer_detail_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
+
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/contentScrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
@@ -29,7 +38,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/sample_jadid" />
+                    android:src="@drawable/img_placeholder" />
 
                 <!-- Кнопка "назад" поверх изображения -->
                 <com.google.android.material.button.MaterialButton
@@ -52,7 +61,7 @@
                 android:fontFamily="@font/roboto_medium"
                 android:paddingHorizontal="16dp"
                 android:paddingTop="12dp"
-                android:text="Mahmudxo‘ja Behbudiy"
+                android:text=""
                 android:textAppearance="?attr/textAppearanceHeadlineSmall"
                 android:textStyle="bold" />
 
@@ -70,7 +79,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/roboto_medium"
-                    android:text="(1875 – 1919)"
+                    android:text="()"
                     android:textAppearance="?attr/textAppearanceBodyMedium"
                     android:textColor="@color/blue" />
 
@@ -104,7 +113,7 @@
                 android:maxLines="5"
                 android:paddingHorizontal="16dp"
                 android:paddingTop="8dp"
-                android:text="U 1875-yilning 19-yanvarida Samarqand yaqinidagi Baxshitepa qishlog‘ida muftiy oilasida dunyoga keldi. Otasi Behbudxo‘ja Solihxo‘ja o‘g‘li turkistonlik, Ahmad Yassaviyning avlodlaridan, ona tomonidan bobosi Niyozxo‘ja urganchlik bo‘lib, amir Shohmurod zamonida (1780-1785 yillar) Samarqandga kelib qolgan. Oiladagi muhit undagi ma’rifat va adabiyotga bo‘lgan qiziqishning tezroq ro‘yobga chiqishiga imkon tug‘dirdi. Behbudiyning otasi islom xuquqshunosligi bo‘yicha yirik mutaxassis bo‘lib, bu borada ko‘plab kitob va risolalar yaratgan edi. Bu o‘z navbatida Mahmudxo‘jaga ta’sir o‘tkazmay qolmadi. U keyinchalik bu haqda so‘zlab, hatto maqolalaridan birida otasi yozgan “Hidoya”  asarining o‘z taqdirida katta rol o‘ynaganini alohida qayd etgan. ..."
+                android:text=""
                 android:textAppearance="?attr/textAppearanceBodyMedium" />
 
             <!-- Раздел Asarlar -->

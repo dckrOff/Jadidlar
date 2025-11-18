@@ -43,4 +43,8 @@
     <color name="material_on_surface_emphasis_medium">#99000000</color>
     <color name="material_on_surface_emphasis_high_type">#DD000000</color>
     <color name="lightGray">#D7D7D7</color>
+    
+    <!-- Shimmer colors -->
+    <color name="shimmer_placeholder">#E0E0E0</color>
+    <color name="shimmer_background_color">#DDDDDD</color>
 </resources>

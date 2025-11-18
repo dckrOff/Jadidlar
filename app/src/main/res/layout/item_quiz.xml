@@ -18,9 +18,10 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textAppearance="?attr/textAppearanceHeadline6"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="Mahmudxo‘ja Behbudiy. Tanlangan asarlar 1-Jild" />
+            tools:text="Mahmudxo'ja Behbudiy. Tanlangan asarlar 1-Jild" />
 
         <TextView
             android:id="@+id/tvQuizDescription"

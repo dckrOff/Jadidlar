@@ -1,7 +1,5 @@
 <resources>
     <string name="app_name">Jadidlar</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="go">Davom etish</string>
     <string name="tests">Ma\'naviy testlar</string>
     <string name="error_occurred">Qandaydir hatolik yuz berdi...</string>
@@ -21,4 +19,18 @@
     <string name="previous_question">Oldingi</string>
     <string name="next_question">Keyingi</string>
     <string name="finish_test">Testni yakunlash</string>
+    
+    <string name="home">Bosh sahifa</string>
+    <string name="jadidlar">Jadidlar</string>
+    <string name="books">Asarlar</string>
+    <string name="loading">Yuklanmoqda...</string>
+    <string name="no_data">Ma\'lumot topilmadi</string>
+    <string name="network_error">Internet aloqasi yo\'q</string>
+    <string name="added_to_favorites">Sevimlilarga qo\'shildi</string>
+    <string name="removed_from_favorites">Sevimlilardan olib tashlandi</string>
+    <string name="download_started">Yuklab olish boshlandi</string>
+    <string name="download_complete">Yuklab olish tugadi</string>
+    <string name="share">Ulashish</string>
+    <string name="search">Qidirish</string>
+    <string name="read">O\'qishni boshlash</string>
 </resources>
