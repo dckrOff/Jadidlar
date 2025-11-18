@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -12,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import uz.dckroff.jadidlar.R
 import uz.dckroff.jadidlar.databinding.FragmentJadidlarBinding
 import uz.dckroff.jadidlar.ui.adapters.JadidAdapter
+import uz.dckroff.jadidlar.utils.ErrorHandler
 import uz.dckroff.jadidlar.utils.Resource
 
 class JadidlarFragment : Fragment() {
@@ -38,8 +38,12 @@ class JadidlarFragment : Fragment() {
 
     private fun setupAdapter() {
         jadidAdapter = JadidAdapter { jadid ->
-            val bundle = bundleOf("jadidId" to jadid.id)
-            findNavController().navigate(R.id.action_jadidlar_to_jadidDetail, bundle)
+            try {
+                val bundle = bundleOf("jadidId" to jadid.id)
+                findNavController().navigate(R.id.action_jadidlar_to_jadidDetail, bundle)
+            } catch (e: Exception) {
+                ErrorHandler.handleException(requireContext(), e, "Sahifaga o'tishda xatolik")
+            }
         }
         binding.recyclerJadids.adapter = jadidAdapter
     }
@@ -52,11 +56,19 @@ class JadidlarFragment : Fragment() {
                 }
                 is Resource.Success -> {
                     binding.progressBar.visibility = View.GONE
-                    jadidAdapter.submitList(resource.data)
+                    try {
+                        jadidAdapter.submitList(resource.data)
+                    } catch (e: Exception) {
+                        ErrorHandler.handleException(requireContext(), e)
+                    }
                 }
                 is Resource.Error -> {
                     binding.progressBar.visibility = View.GONE
-                    Toast.makeText(requireContext(), resource.message, Toast.LENGTH_SHORT).show()
+                    ErrorHandler.showErrorWithRetry(
+                        requireContext(),
+                        "Jadidlar ma'lumotlarini yuklashda xatolik",
+                        onRetry = { viewModel.loadAllJadids() }
+                    )
                 }
             }
         }

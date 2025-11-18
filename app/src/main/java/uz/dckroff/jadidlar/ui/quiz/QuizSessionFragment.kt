@@ -15,6 +15,7 @@ import uz.dckroff.jadidlar.R
 import uz.dckroff.jadidlar.data.models.Question
 import uz.dckroff.jadidlar.databinding.FragmentQuizSessionBinding
 import uz.dckroff.jadidlar.utils.AnalyticsHelper
+import uz.dckroff.jadidlar.utils.ErrorHandler
 import uz.dckroff.jadidlar.utils.Resource
 import java.util.Locale
 
@@ -37,43 +38,72 @@ class QuizSessionFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         
-        testId = arguments?.getString("testId")
-        if (testId != null) {
-            viewModel.loadTest(testId!!)
-            AnalyticsHelper.logTestStarted(requireContext(), testId!!)
+        try {
+            testId = arguments?.getString("testId")
+            if (testId != null) {
+                viewModel.loadTest(testId!!)
+                AnalyticsHelper.logTestStarted(requireContext(), testId!!)
+            } else {
+                ErrorHandler.showErrorDialog(
+                    requireContext(),
+                    message = "Test ma'lumotlari topilmadi"
+                ) {
+                    findNavController().navigateUp()
+                }
+            }
+            
+            setupListeners()
+            observeData()
+        } catch (e: Exception) {
+            ErrorHandler.handleException(requireContext(), e) {
+                findNavController().navigateUp()
+            }
         }
-        
-        setupListeners()
-        observeData()
     }
 
     private fun setupListeners() {
         binding.toolbar.setNavigationOnClickListener {
-            showExitDialog()
+            try {
+                showExitDialog()
+            } catch (e: Exception) {
+                ErrorHandler.handleException(requireContext(), e)
+            }
         }
 
         binding.previousButton.setOnClickListener {
-            viewModel.previousQuestion()
+            try {
+                viewModel.previousQuestion()
+            } catch (e: Exception) {
+                ErrorHandler.handleException(requireContext(), e)
+            }
         }
 
         binding.nextButton.setOnClickListener {
-            val selectedAnswer = getSelectedAnswerIndex()
-            if (selectedAnswer == -1) {
-                Toast.makeText(requireContext(), "Iltimos javob tanlang", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
+            try {
+                val selectedAnswer = getSelectedAnswerIndex()
+                if (selectedAnswer == -1) {
+                    Toast.makeText(requireContext(), "Iltimos javob tanlang", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
+                viewModel.saveAnswer(selectedAnswer)
+                viewModel.nextQuestion()
+            } catch (e: Exception) {
+                ErrorHandler.handleException(requireContext(), e)
             }
-            viewModel.saveAnswer(selectedAnswer)
-            viewModel.nextQuestion()
         }
 
         binding.finishButton.setOnClickListener {
-            val selectedAnswer = getSelectedAnswerIndex()
-            if (selectedAnswer == -1) {
-                Toast.makeText(requireContext(), "Iltimos javob tanlang", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
+            try {
+                val selectedAnswer = getSelectedAnswerIndex()
+                if (selectedAnswer == -1) {
+                    Toast.makeText(requireContext(), "Iltimos javob tanlang", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
+                viewModel.saveAnswer(selectedAnswer)
+                showFinishDialog()
+            } catch (e: Exception) {
+                ErrorHandler.handleException(requireContext(), e)
             }
-            viewModel.saveAnswer(selectedAnswer)
-            showFinishDialog()
         }
     }
 

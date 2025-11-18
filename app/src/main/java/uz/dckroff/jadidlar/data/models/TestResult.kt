@@ -1,10 +1,8 @@
 package uz.dckroff.jadidlar.data.models
 
 import com.google.firebase.Timestamp
-import com.google.firebase.firestore.DocumentId
 
 data class TestResult(
-    @DocumentId
     val id: String = "",
     val testId: String = "",
     val userId: String = "",

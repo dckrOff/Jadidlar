@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -13,6 +12,7 @@ import uz.dckroff.jadidlar.R
 import uz.dckroff.jadidlar.databinding.FragmentHomeBinding
 import uz.dckroff.jadidlar.ui.adapters.BookAdapter
 import uz.dckroff.jadidlar.ui.adapters.JadidAdapter
+import uz.dckroff.jadidlar.utils.ErrorHandler
 import uz.dckroff.jadidlar.utils.Resource
 
 class HomeFragment : Fragment() {
@@ -40,14 +40,22 @@ class HomeFragment : Fragment() {
 
     private fun setupAdapters() {
         jadidAdapter = JadidAdapter { jadid ->
-            val bundle = bundleOf("jadidId" to jadid.id)
-            findNavController().navigate(R.id.action_home_to_jadidDetail, bundle)
+            try {
+                val bundle = bundleOf("jadidId" to jadid.id)
+                findNavController().navigate(R.id.action_home_to_jadidDetail, bundle)
+            } catch (e: Exception) {
+                ErrorHandler.handleException(requireContext(), e, "Sahifaga o'tishda xatolik")
+            }
         }
         binding.recyclerJadidlar.adapter = jadidAdapter
 
         bookAdapter = BookAdapter { book ->
-            val bundle = bundleOf("bookId" to book.id)
-            findNavController().navigate(R.id.action_home_to_bookDetail, bundle)
+            try {
+                val bundle = bundleOf("bookId" to book.id)
+                findNavController().navigate(R.id.action_home_to_bookDetail, bundle)
+            } catch (e: Exception) {
+                ErrorHandler.handleException(requireContext(), e, "Sahifaga o'tishda xatolik")
+            }
         }
         binding.recyclerTopAsarlar.adapter = bookAdapter
     }
@@ -57,14 +65,18 @@ class HomeFragment : Fragment() {
             when (resource) {
                 is Resource.Loading -> {}
                 is Resource.Success -> {
-                    jadidAdapter.submitList(resource.data)
+                    try {
+                        jadidAdapter.submitList(resource.data)
+                    } catch (e: Exception) {
+                        ErrorHandler.handleException(requireContext(), e)
+                    }
                 }
                 is Resource.Error -> {
-                    Toast.makeText(
+                    ErrorHandler.showErrorWithRetry(
                         requireContext(),
-                        resource.message,
-                        Toast.LENGTH_SHORT
-                    ).show()
+                        "Jadidlar ma'lumotlarini yuklashda xatolik",
+                        onRetry = { viewModel.loadData() }
+                    )
                 }
             }
         }
@@ -73,14 +85,18 @@ class HomeFragment : Fragment() {
             when (resource) {
                 is Resource.Loading -> {}
                 is Resource.Success -> {
-                    bookAdapter.submitList(resource.data)
+                    try {
+                        bookAdapter.submitList(resource.data)
+                    } catch (e: Exception) {
+                        ErrorHandler.handleException(requireContext(), e)
+                    }
                 }
                 is Resource.Error -> {
-                    Toast.makeText(
+                    ErrorHandler.showErrorWithRetry(
                         requireContext(),
-                        resource.message,
-                        Toast.LENGTH_SHORT
-                    ).show()
+                        "Kitoblar ma'lumotlarini yuklashda xatolik",
+                        onRetry = { viewModel.loadData() }
+                    )
                 }
             }
         }

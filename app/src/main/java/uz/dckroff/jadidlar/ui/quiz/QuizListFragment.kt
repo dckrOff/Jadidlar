@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -12,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import uz.dckroff.jadidlar.R
 import uz.dckroff.jadidlar.databinding.FragmentQuizListBinding
 import uz.dckroff.jadidlar.ui.adapters.QuizAdapter
+import uz.dckroff.jadidlar.utils.ErrorHandler
 import uz.dckroff.jadidlar.utils.Resource
 
 class QuizListFragment : Fragment() {
@@ -37,8 +37,12 @@ class QuizListFragment : Fragment() {
 
     private fun setupAdapter() {
         quizAdapter = QuizAdapter { test ->
-            val bundle = bundleOf("testId" to test.id)
-            findNavController().navigate(R.id.action_quizList_to_quizSession, bundle)
+            try {
+                val bundle = bundleOf("testId" to test.id)
+                findNavController().navigate(R.id.action_quizList_to_quizSession, bundle)
+            } catch (e: Exception) {
+                ErrorHandler.handleException(requireContext(), e, "Sahifaga o'tishda xatolik")
+            }
         }
         binding.rvQuiz.apply {
             layoutManager = androidx.recyclerview.widget.LinearLayoutManager(requireContext())
@@ -57,20 +61,28 @@ class QuizListFragment : Fragment() {
 
                 is Resource.Success -> {
                     binding.progressBar.visibility = View.GONE
-                    if (resource.data.isEmpty()) {
-                        binding.emptyView.visibility = View.VISIBLE
-                        binding.rvQuiz.visibility = View.GONE
-                    } else {
-                        binding.emptyView.visibility = View.GONE
-                        binding.rvQuiz.visibility = View.VISIBLE
-                        quizAdapter.submitList(resource.data)
+                    try {
+                        if (resource.data.isEmpty()) {
+                            binding.emptyView.visibility = View.VISIBLE
+                            binding.rvQuiz.visibility = View.GONE
+                        } else {
+                            binding.emptyView.visibility = View.GONE
+                            binding.rvQuiz.visibility = View.VISIBLE
+                            quizAdapter.submitList(resource.data)
+                        }
+                    } catch (e: Exception) {
+                        ErrorHandler.handleException(requireContext(), e)
                     }
                 }
 
                 is Resource.Error -> {
                     binding.progressBar.visibility = View.GONE
                     binding.errorView.root.visibility = View.VISIBLE
-                    Toast.makeText(requireContext(), resource.message, Toast.LENGTH_SHORT).show()
+                    ErrorHandler.showErrorWithRetry(
+                        requireContext(),
+                        "Testlar ma'lumotlarini yuklashda xatolik",
+                        onRetry = { viewModel.loadTests() }
+                    )
                 }
             }
         }

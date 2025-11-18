@@ -2,6 +2,7 @@ package uz.dckroff.jadidlar.ui
 
 import android.os.Bundle
 import android.view.View
+import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
@@ -34,7 +35,11 @@ class MainActivity : AppCompatActivity() {
                 R.id.jadidlarFragment,
                 R.id.booksFragment,
                 R.id.quizListFragment -> {
-                    binding.bottomNavigation.visibility = View.VISIBLE
+                    if (binding.bottomNavigation.visibility != View.VISIBLE) {
+                        binding.bottomNavigation.visibility = View.VISIBLE
+                        val slideUp = AnimationUtils.loadAnimation(this, R.anim.slide_in_bottom)
+                        binding.bottomNavigation.startAnimation(slideUp)
+                    }
                 }
                 // Детальные экраны - скрываем bottom navigation
                 R.id.bookReaderFragment,
@@ -42,7 +47,11 @@ class MainActivity : AppCompatActivity() {
                 R.id.jadidDetailFragment,
                 R.id.quizSessionFragment,
                 R.id.quizResultsFragment -> {
-                    binding.bottomNavigation.visibility = View.GONE
+                    if (binding.bottomNavigation.visibility == View.VISIBLE) {
+                        val slideDown = AnimationUtils.loadAnimation(this, R.anim.slide_out_bottom)
+                        binding.bottomNavigation.startAnimation(slideDown)
+                        binding.bottomNavigation.visibility = View.GONE
+                    }
                 }
             }
         }

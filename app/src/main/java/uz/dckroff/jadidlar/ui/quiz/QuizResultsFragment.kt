@@ -12,6 +12,7 @@ import androidx.navigation.fragment.findNavController
 import uz.dckroff.jadidlar.R
 import uz.dckroff.jadidlar.databinding.FragmentQuizResultsBinding
 import uz.dckroff.jadidlar.ui.adapters.QuestionResultAdapter
+import uz.dckroff.jadidlar.utils.ErrorHandler
 import uz.dckroff.jadidlar.utils.Resource
 import java.util.Locale
 
@@ -34,20 +35,36 @@ class QuizResultsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         
-        val testId = arguments?.getString("testId") ?: return
-        val score = arguments?.getInt("score") ?: 0
-        val totalQuestions = arguments?.getInt("totalQuestions") ?: 0
-        val timeSpent = arguments?.getLong("timeSpent") ?: 0
-        
-        setupAdapter()
-        setupListeners(testId)
-        displayResults(score, totalQuestions, timeSpent)
-        
-        val userAnswers = mutableMapOf<Int, Int>()
-        viewModel.loadTestResults(testId, userAnswers)
-        viewModel.saveResult(testId, score, totalQuestions, timeSpent, userAnswers)
-        
-        observeData()
+        try {
+            val testId = arguments?.getString("testId")
+            if (testId == null) {
+                ErrorHandler.showErrorDialog(
+                    requireContext(),
+                    message = "Test ma'lumotlari topilmadi"
+                ) {
+                    findNavController().navigateUp()
+                }
+                return
+            }
+            
+            val score = arguments?.getInt("score") ?: 0
+            val totalQuestions = arguments?.getInt("totalQuestions") ?: 0
+            val timeSpent = arguments?.getLong("timeSpent") ?: 0
+            
+            setupAdapter()
+            setupListeners(testId)
+            displayResults(score, totalQuestions, timeSpent)
+            
+            val userAnswers = mutableMapOf<Int, Int>()
+            viewModel.loadTestResults(testId, userAnswers)
+            viewModel.saveResult(testId, score, totalQuestions, timeSpent, userAnswers)
+            
+            observeData()
+        } catch (e: Exception) {
+            ErrorHandler.handleException(requireContext(), e) {
+                findNavController().navigateUp()
+            }
+        }
     }
 
     private fun setupAdapter() {
@@ -57,12 +74,20 @@ class QuizResultsFragment : Fragment() {
 
     private fun setupListeners(testId: String) {
         binding.toolbar.setNavigationOnClickListener {
-            findNavController().navigateUp()
+            try {
+                findNavController().navigateUp()
+            } catch (e: Exception) {
+                ErrorHandler.handleException(requireContext(), e)
+            }
         }
 
         binding.retakeQuizButton.setOnClickListener {
-            val bundle = bundleOf("testId" to testId)
-            findNavController().navigate(R.id.action_quizSession_to_results, bundle)
+            try {
+                val bundle = bundleOf("testId" to testId)
+                findNavController().navigate(R.id.action_quizSession_to_results, bundle)
+            } catch (e: Exception) {
+                ErrorHandler.handleException(requireContext(), e, "Testni qayta boshlashda xatolik")
+            }
         }
     }
 

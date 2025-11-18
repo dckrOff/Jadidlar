@@ -65,7 +65,7 @@
                             android:fontFamily="@font/roboto_medium"
                             android:textAppearance="?attr/textAppearanceTitleLarge"
                             android:textStyle="bold"
-                            tools:text="Yoshlarga murojaat" />
+                            tools:text="" />
 
                         <TextView
                             android:id="@+id/textAuthorName"
@@ -76,7 +76,7 @@
                             android:focusable="true"
                             android:textAppearance="?attr/textAppearanceBodyLarge"
                             android:textColor="@color/blue"
-                            tools:text="Mahmudxo'ja Behbudiy" />
+                            tools:text="" />
 
                         <TextView
                             android:id="@+id/textPublishYear"
@@ -84,7 +84,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
                             android:textAppearance="?attr/textAppearanceBodyMedium"
-                            tools:text="1917-yil" />
+                            tools:text="" />
 
                         <LinearLayout
                             android:layout_width="wrap_content"
@@ -105,7 +105,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="4dp"
                                 android:textAppearance="?attr/textAppearanceBodyMedium"
-                                tools:text="1250 o'qilgan" />
+                                tools:text="" />
 
                         </LinearLayout>
 
@@ -131,7 +131,7 @@
                 android:layout_marginTop="8dp"
                 android:lineSpacingExtra="4dp"
                 android:textAppearance="?attr/textAppearanceBodyMedium"
-                tools:text="Bizni Turkiston va Buxoroda bir sinf muhtaram yoshlar mavjuddurki..." />
+                tools:text="" />
 
             <TextView
                 android:id="@+id/textOtherBooksHeader"

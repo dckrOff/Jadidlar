@@ -12,13 +12,25 @@
         tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_home_to_jadidDetail"
-            app:destination="@id/jadidDetailFragment" />
+            app:destination="@id/jadidDetailFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
         <action
             android:id="@+id/action_home_to_jadidList"
-            app:destination="@id/jadidlarFragment" />
+            app:destination="@id/jadidlarFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
         <action
             android:id="@+id/action_home_to_bookDetail"
-            app:destination="@id/bookDetailFragment" />
+            app:destination="@id/bookDetailFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
 
     <fragment
@@ -28,7 +40,11 @@
         tools:layout="@layout/fragment_jadidlar">
         <action
             android:id="@+id/action_jadidlar_to_jadidDetail"
-            app:destination="@id/jadidDetailFragment" />
+            app:destination="@id/jadidDetailFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
 
     <fragment
@@ -41,7 +57,11 @@
             app:argType="string" />
         <action
             android:id="@+id/action_jadidDetail_to_bookDetail"
-            app:destination="@id/bookDetailFragment" />
+            app:destination="@id/bookDetailFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
 
     <fragment
@@ -51,7 +71,11 @@
         tools:layout="@layout/fragment_quiz_list">
         <action
             android:id="@+id/action_quizList_to_quizSession"
-            app:destination="@id/quizSessionFragment" />
+            app:destination="@id/quizSessionFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
 
     <fragment
@@ -65,7 +89,11 @@
         <action
             android:id="@+id/action_quizSession_to_results"
             app:destination="@id/quizResultsFragment"
-            app:popUpTo="@id/quizListFragment" />
+            app:popUpTo="@id/quizListFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
     </fragment>
 
     <fragment
@@ -94,7 +122,11 @@
         tools:layout="@layout/fragment_books">
         <action
             android:id="@+id/action_books_to_bookDetail"
-            app:destination="@id/bookDetailFragment" />
+            app:destination="@id/bookDetailFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
 
     <fragment
@@ -107,13 +139,25 @@
             app:argType="string" />
         <action
             android:id="@+id/action_bookDetail_to_reader"
-            app:destination="@id/bookReaderFragment" />
+            app:destination="@id/bookReaderFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
         <action
             android:id="@+id/action_bookDetail_to_jadidDetail"
-            app:destination="@id/jadidDetailFragment" />
+            app:destination="@id/jadidDetailFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
         <action
             android:id="@+id/action_bookDetail_to_bookDetail"
-            app:destination="@id/bookDetailFragment" />
+            app:destination="@id/bookDetailFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
 
     <fragment

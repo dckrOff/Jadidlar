@@ -1,9 +1,6 @@
 package uz.dckroff.jadidlar.data.models
 
-import com.google.firebase.firestore.DocumentId
-
 data class Test(
-    @DocumentId
     val id: String = "",
     val title: String = "",
     val description: String = "",

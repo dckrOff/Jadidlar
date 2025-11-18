@@ -1,11 +1,12 @@
 package uz.dckroff.jadidlar.ui.books
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.appcompat.widget.SearchView
+import android.view.inputmethod.EditorInfo
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -13,11 +14,8 @@ import androidx.navigation.fragment.findNavController
 import uz.dckroff.jadidlar.R
 import uz.dckroff.jadidlar.databinding.FragmentBooksBinding
 import uz.dckroff.jadidlar.ui.adapters.BookAdapter
+import uz.dckroff.jadidlar.utils.ErrorHandler
 import uz.dckroff.jadidlar.utils.Resource
-
-import android.text.Editable
-import android.text.TextWatcher
-import android.view.inputmethod.EditorInfo
 
 class BooksFragment : Fragment() {
     private var _binding: FragmentBooksBinding? = null
@@ -44,8 +42,12 @@ class BooksFragment : Fragment() {
 
     private fun setupAdapter() {
         bookAdapter = BookAdapter { book ->
-            val bundle = bundleOf("bookId" to book.id)
-            findNavController().navigate(R.id.action_books_to_bookDetail, bundle)
+            try {
+                val bundle = bundleOf("bookId" to book.id)
+                findNavController().navigate(R.id.action_books_to_bookDetail, bundle)
+            } catch (e: Exception) {
+                ErrorHandler.handleException(requireContext(), e, "Sahifaga o'tishda xatolik")
+            }
         }
         binding.recyclerBooks.adapter = bookAdapter
     }
@@ -53,7 +55,11 @@ class BooksFragment : Fragment() {
     private fun setupListeners() {
         // Связываем SearchBar и SearchView
         binding.searchBar.setOnClickListener {
-            binding.searchView.show()
+            try {
+                binding.searchView.show()
+            } catch (e: Exception) {
+                ErrorHandler.handleException(requireContext(), e)
+            }
         }
 
         // Обрабатываем текст в SearchView
@@ -61,8 +67,12 @@ class BooksFragment : Fragment() {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                s?.toString()?.let { query ->
-                    viewModel.searchBooks(query)
+                try {
+                    s?.toString()?.let { query ->
+                        viewModel.searchBooks(query)
+                    }
+                } catch (e: Exception) {
+                    ErrorHandler.handleException(requireContext(), e)
                 }
             }
 
@@ -71,26 +81,43 @@ class BooksFragment : Fragment() {
 
         // Обработка отправки поиска
         binding.searchView.editText.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                val query = binding.searchView.text.toString()
-                viewModel.searchBooks(query)
-                binding.searchView.hide()
-                true
-            } else {
+            try {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    val query = binding.searchView.text.toString()
+                    viewModel.searchBooks(query)
+                    binding.searchView.hide()
+                    true
+                } else {
+                    false
+                }
+            } catch (e: Exception) {
+                ErrorHandler.handleException(requireContext(), e)
                 false
             }
         }
 
         binding.chipAll.setOnClickListener {
-            viewModel.showAll()
+            try {
+                viewModel.showAll()
+            } catch (e: Exception) {
+                ErrorHandler.handleException(requireContext(), e)
+            }
         }
 
         binding.chipRating.setOnClickListener {
-            viewModel.sortByRating()
+            try {
+                viewModel.sortByRating()
+            } catch (e: Exception) {
+                ErrorHandler.handleException(requireContext(), e)
+            }
         }
 
         binding.chipYear.setOnClickListener {
-            viewModel.sortByYear()
+            try {
+                viewModel.sortByYear()
+            } catch (e: Exception) {
+                ErrorHandler.handleException(requireContext(), e)
+            }
         }
     }
 
@@ -104,19 +131,27 @@ class BooksFragment : Fragment() {
 
                 is Resource.Success -> {
                     binding.progressBar.visibility = View.GONE
-                    if (resource.data.isEmpty()) {
-                        binding.emptyView.visibility = View.VISIBLE
-                        binding.recyclerBooks.visibility = View.GONE
-                    } else {
-                        binding.emptyView.visibility = View.GONE
-                        binding.recyclerBooks.visibility = View.VISIBLE
-                        bookAdapter.submitList(resource.data)
+                    try {
+                        if (resource.data.isEmpty()) {
+                            binding.emptyView.visibility = View.VISIBLE
+                            binding.recyclerBooks.visibility = View.GONE
+                        } else {
+                            binding.emptyView.visibility = View.GONE
+                            binding.recyclerBooks.visibility = View.VISIBLE
+                            bookAdapter.submitList(resource.data)
+                        }
+                    } catch (e: Exception) {
+                        ErrorHandler.handleException(requireContext(), e)
                     }
                 }
 
                 is Resource.Error -> {
                     binding.progressBar.visibility = View.GONE
-                    Toast.makeText(requireContext(), resource.message, Toast.LENGTH_SHORT).show()
+                    ErrorHandler.showErrorWithRetry(
+                        requireContext(),
+                        "Kitoblar ma'lumotlarini yuklashda xatolik",
+                        onRetry = { viewModel.loadBooks() }
+                    )
                 }
             }
         }

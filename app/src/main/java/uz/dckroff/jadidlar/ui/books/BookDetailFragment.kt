@@ -14,12 +14,13 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
-import com.bumptech.glide.Glide
 import uz.dckroff.jadidlar.R
 import uz.dckroff.jadidlar.databinding.FragmentBookDetailBinding
 import uz.dckroff.jadidlar.ui.adapters.BookAdapter
 import uz.dckroff.jadidlar.utils.AnalyticsHelper
+import uz.dckroff.jadidlar.utils.ErrorHandler
 import uz.dckroff.jadidlar.utils.Resource
+import uz.dckroff.jadidlar.utils.loadImageSafe
 
 class BookDetailFragment : Fragment() {
     private var _binding: FragmentBookDetailBinding? = null
@@ -41,49 +42,81 @@ class BookDetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        currentBookId = arguments?.getString("bookId")
-        if (currentBookId != null) {
-            viewModel.loadBook(currentBookId!!, requireContext())
-        }
+        try {
+            currentBookId = arguments?.getString("bookId")
+            if (currentBookId != null) {
+                viewModel.loadBook(currentBookId!!, requireContext())
+            } else {
+                ErrorHandler.showErrorDialog(
+                    requireContext(),
+                    message = "Kitob ma'lumotlari topilmadi"
+                ) {
+                    findNavController().navigateUp()
+                }
+            }
 
-        setupAdapter()
-        setupListeners()
-        setupMenu()
-        observeData()
+            setupAdapter()
+            setupListeners()
+            setupMenu()
+            observeData()
+        } catch (e: Exception) {
+            ErrorHandler.handleException(requireContext(), e) {
+                findNavController().navigateUp()
+            }
+        }
     }
 
     private fun setupAdapter() {
         otherBooksAdapter = BookAdapter { book ->
-            val bundle = bundleOf("bookId" to book.id)
-            findNavController().navigate(R.id.action_bookDetail_to_bookDetail, bundle)
+            try {
+                val bundle = bundleOf("bookId" to book.id)
+                findNavController().navigate(R.id.action_bookDetail_to_bookDetail, bundle)
+            } catch (e: Exception) {
+                ErrorHandler.handleException(requireContext(), e, "Sahifaga o'tishda xatolik")
+            }
         }
         binding.recyclerOtherBooks.adapter = otherBooksAdapter
     }
 
     private fun setupListeners() {
         binding.toolbar.setNavigationOnClickListener {
-            findNavController().navigateUp()
+            try {
+                findNavController().navigateUp()
+            } catch (e: Exception) {
+                ErrorHandler.handleException(requireContext(), e)
+            }
         }
 
         binding.buttonStartReading.setOnClickListener {
-            val book =
-                (viewModel.book.value as? Resource.Success)?.data ?: return@setOnClickListener
+            try {
+                val book = (viewModel.book.value as? Resource.Success)?.data
+                if (book != null) {
+                    AnalyticsHelper.logReadingStarted(requireContext(), book.id)
 
-            AnalyticsHelper.logReadingStarted(requireContext(), book.id)
-
-            val bundle = bundleOf(
-                "bookId" to book.id,
-                "bookTitle" to book.title,
-                "pdfUrl" to book.pdfUrl
-            )
-            findNavController().navigate(R.id.action_bookDetail_to_reader, bundle)
+                    val bundle = bundleOf(
+                        "bookId" to book.id,
+                        "bookTitle" to book.title,
+                        "pdfUrl" to book.pdfUrl
+                    )
+                    findNavController().navigate(R.id.action_bookDetail_to_reader, bundle)
+                } else {
+                    ErrorHandler.showErrorDialog(requireContext(), message = "Kitob ma'lumotlari topilmadi")
+                }
+            } catch (e: Exception) {
+                ErrorHandler.handleException(requireContext(), e, "O'qishni boshlashda xatolik")
+            }
         }
 
         binding.textAuthorName.setOnClickListener {
-            val book =
-                (viewModel.book.value as? Resource.Success)?.data ?: return@setOnClickListener
-            val bundle = bundleOf("jadidId" to book.authorId)
-            findNavController().navigate(R.id.action_bookDetail_to_jadidDetail, bundle)
+            try {
+                val book = (viewModel.book.value as? Resource.Success)?.data
+                if (book != null) {
+                    val bundle = bundleOf("jadidId" to book.authorId)
+                    findNavController().navigate(R.id.action_bookDetail_to_jadidDetail, bundle)
+                }
+            } catch (e: Exception) {
+                ErrorHandler.handleException(requireContext(), e, "Sahifaga o'tishda xatolik")
+            }
         }
     }
 
@@ -95,32 +128,39 @@ class BookDetailFragment : Fragment() {
             }
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-                return when (menuItem.itemId) {
-                    R.id.action_favorite -> {
-                        currentBookId?.let {
-                            viewModel.toggleFavorite(it, requireContext())
+                return try {
+                    when (menuItem.itemId) {
+                        R.id.action_favorite -> {
+                            currentBookId?.let {
+                                viewModel.toggleFavorite(it, requireContext())
+                            }
+                            true
                         }
-                        true
-                    }
 
-                    R.id.action_download -> {
-                        val book = (viewModel.book.value as? Resource.Success)?.data
-                        if (book != null) {
-                            viewModel.downloadBook(
-                                requireContext(),
-                                book.pdfUrl,
-                                "${book.title}.pdf"
-                            )
-                            Toast.makeText(
-                                requireContext(),
-                                getString(R.string.download_started),
-                                Toast.LENGTH_SHORT
-                            ).show()
+                        R.id.action_download -> {
+                            val book = (viewModel.book.value as? Resource.Success)?.data
+                            if (book != null) {
+                                viewModel.downloadBook(
+                                    requireContext(),
+                                    book.pdfUrl,
+                                    "${book.title}.pdf"
+                                )
+                                Toast.makeText(
+                                    requireContext(),
+                                    getString(R.string.download_started),
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            } else {
+                                ErrorHandler.showErrorDialog(requireContext(), message = "Kitob ma'lumotlari topilmadi")
+                            }
+                            true
                         }
-                        true
-                    }
 
-                    else -> false
+                        else -> false
+                    }
+                } catch (e: Exception) {
+                    ErrorHandler.handleException(requireContext(), e)
+                    false
                 }
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
@@ -135,12 +175,21 @@ class BookDetailFragment : Fragment() {
 
                 is Resource.Success -> {
                     binding.progressBar.visibility = View.GONE
-                    displayBook(resource.data)
+                    try {
+                        displayBook(resource.data)
+                    } catch (e: Exception) {
+                        ErrorHandler.handleException(requireContext(), e)
+                    }
                 }
 
                 is Resource.Error -> {
                     binding.progressBar.visibility = View.GONE
-                    Toast.makeText(requireContext(), resource.message, Toast.LENGTH_SHORT).show()
+                    ErrorHandler.showErrorWithRetry(
+                        requireContext(),
+                        "Kitob ma'lumotlarini yuklashda xatolik \n " + resource.message,
+                        onRetry = { currentBookId?.let { viewModel.loadBook(it, requireContext()) } },
+                        onCancel = { findNavController().navigateUp() }
+                    )
                 }
             }
         }
@@ -148,10 +197,14 @@ class BookDetailFragment : Fragment() {
         viewModel.otherBooks.observe(viewLifecycleOwner) { resource ->
             when (resource) {
                 is Resource.Success -> {
-                    if (resource.data.isNotEmpty()) {
-                        binding.textOtherBooksHeader.visibility = View.VISIBLE
-                        binding.recyclerOtherBooks.visibility = View.VISIBLE
-                        otherBooksAdapter.submitList(resource.data)
+                    try {
+                        if (resource.data.isNotEmpty()) {
+                            binding.textOtherBooksHeader.visibility = View.VISIBLE
+                            binding.recyclerOtherBooks.visibility = View.VISIBLE
+                            otherBooksAdapter.submitList(resource.data)
+                        }
+                    } catch (e: Exception) {
+                        ErrorHandler.handleException(requireContext(), e)
                     }
                 }
 
@@ -160,12 +213,7 @@ class BookDetailFragment : Fragment() {
         }
 
         viewModel.isFavorite.observe(viewLifecycleOwner) { isFavorite ->
-            val message = if (isFavorite) {
-                getString(R.string.added_to_favorites)
-            } else {
-                getString(R.string.removed_from_favorites)
-            }
-//            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+            // Не показываем toast, так как это не критично
         }
     }
 
@@ -175,13 +223,7 @@ class BookDetailFragment : Fragment() {
         binding.textPublishYear.text = "${book.publishYear}-yil"
         binding.textRating.text = "${book.rating} o'qilgan"
         binding.textDescription.text = book.description
-
-        Glide.with(this)
-            .load(book.coverImageUrl)
-            .placeholder(R.drawable.img_placeholder)
-            .error(R.drawable.img_placeholder)
-            .centerCrop()
-            .into(binding.imageBookCover)
+        binding.imageBookCover.loadImageSafe(book.coverImageUrl)
     }
 
     override fun onDestroyView() {
