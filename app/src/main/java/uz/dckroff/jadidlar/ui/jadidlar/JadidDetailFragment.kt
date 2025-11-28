@@ -105,6 +105,7 @@ class JadidDetailFragment : Fragment() {
                     binding.contentScrollView.visibility = View.GONE
                     startShimmerAnimation()
                 }
+
                 is Resource.Success -> {
                     stopShimmerAnimation()
                     binding.shimmerDetail.root.visibility = View.GONE

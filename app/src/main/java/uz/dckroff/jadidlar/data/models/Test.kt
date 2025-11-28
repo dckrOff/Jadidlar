@@ -6,5 +6,6 @@ data class Test(
     val description: String = "",
     val questionCount: Int = 0,
     val timeLimit: Int = 0,
-    val questions: List<Question> = emptyList()
+    val questions: List<Question> = emptyList(),
+    val isOnboardingQuiz: Boolean = false
 )

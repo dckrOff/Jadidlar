@@ -25,6 +25,7 @@ class QuizSessionFragment : Fragment() {
     
     private val viewModel: QuizSessionViewModel by viewModels()
     private var testId: String? = null
+    private var isOnboarding: Boolean = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,9 +41,16 @@ class QuizSessionFragment : Fragment() {
         
         try {
             testId = arguments?.getString("testId")
+            isOnboarding = arguments?.getBoolean("isOnboarding", false) ?: false
+            
             if (testId != null) {
                 viewModel.loadTest(testId!!)
                 AnalyticsHelper.logTestStarted(requireContext(), testId!!)
+                
+                // Обновить заголовок для вводного теста
+                if (isOnboarding) {
+                    binding.toolbar.title = "Kirish testi"
+                }
             } else {
                 ErrorHandler.showErrorDialog(
                     requireContext(),
@@ -209,11 +217,22 @@ class QuizSessionFragment : Fragment() {
     }
 
     private fun showExitDialog() {
+        val message = if (isOnboarding) {
+            "Kirish testini tark etsangiz, asosiy sahifaga o'tasiz. Davom etishni xohlaysizmi?"
+        } else {
+            "Testni tark etsangiz, natijalar saqlanmaydi. Davom etishni xohlaysizmi?"
+        }
+        
         AlertDialog.Builder(requireContext())
             .setTitle("Testni tark etish")
-            .setMessage("Testni tark etsangiz, natijalar saqlanmaydi. Davom etishni xohlaysizmi?")
+            .setMessage(message)
             .setPositiveButton("Tark etish") { _, _ ->
-                findNavController().navigateUp()
+                if (isOnboarding) {
+                    // Для вводного теста - пропустить и перейти к главному экрану
+                    (activity as? uz.dckroff.jadidlar.ui.MainActivity)?.onOnboardingQuizCompleted()
+                } else {
+                    findNavController().navigateUp()
+                }
             }
             .setNegativeButton("Qaytish", null)
             .show()
@@ -226,13 +245,26 @@ class QuizSessionFragment : Fragment() {
             AnalyticsHelper.logTestCompleted(requireContext(), it, score, timeSpent)
         }
         
-        val bundle = bundleOf(
-            "testId" to testId,
-            "score" to score,
-            "totalQuestions" to totalQuestions,
-            "timeSpent" to timeSpent
-        )
-        findNavController().navigate(R.id.action_quizSession_to_results, bundle)
+        if (isOnboarding) {
+            // Для вводного теста - отметить как пройденный и перейти к главному экрану
+            (activity as? uz.dckroff.jadidlar.ui.MainActivity)?.onOnboardingQuizCompleted()
+            
+            // Показать поздравительное сообщение
+            Toast.makeText(
+                requireContext(),
+                "Tabriklaymiz! Siz kirish testini muvaffaqiyatli yakunladingiz. $score/$totalQuestions to'g'ri javob!",
+                Toast.LENGTH_LONG
+            ).show()
+        } else {
+            // Для обычного теста - перейти к экрану результатов
+            val bundle = bundleOf(
+                "testId" to testId,
+                "score" to score,
+                "totalQuestions" to totalQuestions,
+                "timeSpent" to timeSpent
+            )
+            findNavController().navigate(R.id.action_quizSession_to_results, bundle)
+        }
     }
 
     override fun onDestroyView() {
