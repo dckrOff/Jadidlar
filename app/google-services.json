@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "625704331374",
+    "project_id": "jadidlar-9285d",
+    "storage_bucket": "jadidlar-9285d.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:625704331374:android:1a12964e3e9f640cac1e7f",
+        "android_client_info": {
+          "package_name": "uz.dckroff.jadidlar"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB1-NliirbtVZJcxY2H9YvcVt6N9TWwrrM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

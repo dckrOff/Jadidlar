@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".HomeFragment">
+    android:layout_height="match_parent">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -35,7 +34,6 @@
                     android:text="Bosh menu"
                     android:textAppearance="?attr/textAppearanceHeadlineMedium"
                     android:textSize="28sp" />
-
             </LinearLayout>
 
             <!-- Раздел Jadidlar -->
@@ -61,6 +59,20 @@
                     app:tint="?attr/colorOnSurfaceVariant" />
             </LinearLayout>
 
+            <!-- Shimmer для Jadidlar -->
+            <LinearLayout
+                android:id="@+id/shimmerJadidlar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <include layout="@layout/shimmer_item_jadid" />
+                <include layout="@layout/shimmer_item_jadid" />
+                <include layout="@layout/shimmer_item_jadid" />
+            </LinearLayout>
+
             <!-- Горизонтальный список Jadidlar -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerJadidlar"
@@ -72,7 +84,6 @@
                 android:overScrollMode="never"
                 android:paddingEnd="8dp"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:orientation="horizontal"
                 tools:listitem="@layout/item_jadid" />
 
             <!-- Раздел Top asarlar -->
@@ -98,16 +109,30 @@
                     app:tint="?attr/colorOnSurfaceVariant" />
             </LinearLayout>
 
+            <!-- Shimmer для Books -->
+            <LinearLayout
+                android:id="@+id/shimmerBooks"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <include layout="@layout/shimmer_item_book" />
+                <include layout="@layout/shimmer_item_book" />
+                <include layout="@layout/shimmer_item_book" />
+            </LinearLayout>
+
             <!-- Вертикальный список книг -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerTopAsarlar"
                 android:layout_width="match_parent"
-                tools:listitem="@layout/item_book"
                 android:layout_height="wrap_content"
-                tools:itemCount="3"
                 android:layout_marginTop="8dp"
                 android:overScrollMode="never"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:itemCount="3"
+                tools:listitem="@layout/item_book" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
