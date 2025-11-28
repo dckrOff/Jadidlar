@@ -12,7 +12,7 @@
     
     <item
         android:id="@+id/booksFragment"
-        android:icon="@drawable/ic_account_circle"
+        android:icon="@drawable/ic_book"
         android:title="@string/books" />
     
     <item
@@ -22,6 +22,6 @@
     
     <item
         android:id="@+id/maxsusTestsListFragment"
-        android:icon="@drawable/ic_question"
+        android:icon="@drawable/ic_star"
         android:title="@string/maxsus_tests" />
 </menu>
